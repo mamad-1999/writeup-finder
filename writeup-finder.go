@@ -106,7 +106,7 @@ func connectDB() (*sql.DB, error) {
 func readFoundUrlsFromDB(db *sql.DB) (map[string]struct{}, error) {
 	foundUrls := make(map[string]struct{})
 
-	rows, err := db.Query("SELECT url FROM found_urls")
+	rows, err := db.Query("SELECT url FROM articles")
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func readFoundUrlsFromDB(db *sql.DB) (map[string]struct{}, error) {
 }
 
 func saveUrlToDB(db *sql.DB, url string) error {
-	_, err := db.Exec("INSERT INTO found_urls (url) VALUES ($1)", url)
+	_, err := db.Exec("INSERT INTO articles (url) VALUES ($1)", url)
 	return err
 }
 
