@@ -12,7 +12,6 @@ https://medium.com/feed/tag/api-security
 https://medium.com/feed/tag/hackerone
 https://medium.com/feed/tag/authentication
 https://medium.com/feed/@cappriciosec
-https://medium.com/feed/@302Found
 https://medium.com/@Hacker0x01/feed
 https://medium.com/feed/pentesternepal
 https://0xjin.medium.com/feed

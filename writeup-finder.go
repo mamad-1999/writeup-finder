@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -24,8 +25,18 @@ type TelegramMessage struct {
 	Text   string `json:"text"`
 }
 
+type UrlEntry struct {
+	Title string `json:"title"`
+	Url   string `json:"url"`
+}
+
+type FoundUrls struct {
+	Urls []UrlEntry `json:"urls"`
+}
+
 var useFile bool
 var useDatabase bool
+var sendToTelegramFlag bool
 
 func init() {
 	// Load the .env file
@@ -123,32 +134,64 @@ func saveUrlToDB(db *sql.DB, url string) error {
 
 func readFoundUrlsFromFile() map[string]struct{} {
 	foundUrls := make(map[string]struct{})
-	file, err := os.Open("found-url.txt")
+	file, err := os.Open("found-url.json")
 	if err != nil {
 		return foundUrls
 	}
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		foundUrls[scanner.Text()] = struct{}{}
+	var data FoundUrls
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&data)
+	if err != nil {
+		if err == io.EOF {
+			// File is empty, return an empty map
+			return foundUrls
+		}
+		fmt.Println(color.RedString("Error decoding found URL JSON file: %s", err))
+		return foundUrls
 	}
 
-	if err := scanner.Err(); err != nil {
-		fmt.Println(color.RedString("Error scanning found URL file: %s", err))
+	for _, entry := range data.Urls {
+		foundUrls[entry.Url] = struct{}{}
 	}
+
 	return foundUrls
 }
 
-func saveUrlToFile(url string) {
-	file, err := os.OpenFile("found-url.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+func saveUrlToFile(title string, url string) {
+	file, err := os.OpenFile("found-url.json", os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
-		fmt.Println(color.RedString("Error opening found URL file: %s", err))
+		fmt.Println(color.RedString("Error opening found URL JSON file: %s", err))
 		return
 	}
 	defer file.Close()
 
-	file.WriteString(url + "\n")
+	var data FoundUrls
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&data)
+	if err != nil && err != io.EOF {
+		fmt.Println(color.RedString("Error decoding found URL JSON file: %s", err))
+		return
+	}
+
+	// If the file was empty, initialize the list
+	if err == io.EOF {
+		data.Urls = []UrlEntry{}
+	}
+
+	// Add the new title and URL
+	newEntry := UrlEntry{Title: title, Url: url}
+	data.Urls = append(data.Urls, newEntry)
+
+	// Move the file pointer to the beginning to overwrite the file
+	file.Seek(0, 0)
+	file.Truncate(0) // Clear the file before writing the updated content
+	encoder := json.NewEncoder(file)
+	err = encoder.Encode(data)
+	if err != nil {
+		fmt.Println(color.RedString("Error encoding to found URL JSON file: %s", err))
+	}
 }
 
 // Common functions
@@ -230,6 +273,7 @@ func sendToTelegram(message string, botToken string, channelID string) {
 func main() {
 	flag.BoolVar(&useFile, "f", false, "Save new articles in found-url.txt")
 	flag.BoolVar(&useDatabase, "d", false, "Save new articles in the database")
+	flag.BoolVar(&sendToTelegramFlag, "t", false, "Send new articles to Telegram")
 	flag.Parse()
 
 	if !useFile && !useDatabase {
@@ -278,10 +322,12 @@ func main() {
 					message := fmt.Sprintf("▶ %s\nPublished: %s\nLink: %s",
 						article.Title, article.Published, article.Link)
 
-					sendToTelegram(message, TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
+					if sendToTelegramFlag {
+						sendToTelegram(message, TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
+					}
 
 					if useFile {
-						saveUrlToFile(article.Link)
+						saveUrlToFile(article.Title, article.Link)
 					} else if useDatabase {
 						err = saveUrlToDB(db, article.Link)
 						if err != nil {
@@ -295,7 +341,6 @@ func main() {
 				}
 			}
 		}
-
 	}
 
 	printPretty(fmt.Sprintf("Total new articles found: %d", articlesFound), color.FgCyan, false)
