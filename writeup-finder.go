@@ -218,9 +218,12 @@ func printPretty(message string, colorAttr color.Attribute, isTitle bool) {
 	colored := color.New(colorAttr).SprintFunc()
 
 	if isTitle {
-		fmt.Println(colored(strings.Repeat("=", 80)))
-		fmt.Println(colored(fmt.Sprintf("%80s", message)))
-		fmt.Println(colored(strings.Repeat("=", 80)))
+		width := 80 // Set the width for alignment
+		// Calculate padding
+		padding := (width - len(message)) / 2
+		fmt.Println(colored(strings.Repeat("=", width)))
+		fmt.Printf("%s%s%s\n", strings.Repeat(" ", padding), colored(message), strings.Repeat(" ", width-len(message)-padding))
+		fmt.Println(colored(strings.Repeat("=", width)))
 	} else {
 		fmt.Println(color.CyanString(timestamp), "-", colored(message))
 	}
@@ -282,10 +285,10 @@ func main() {
 
 	TELEGRAM_BOT_TOKEN := os.Getenv("TELEGRAM_BOT_TOKEN")
 	TELEGRAM_CHANNEL_ID := os.Getenv("TELEGRAM_CHANNEL_ID")
-	printPretty("Starting Writeup Finder Script", color.FgGreen, true)
+	printPretty("Starting Writeup Finder Script", color.FgHiYellow, true)
 
 	urls := readUrls()
-	threeDaysAgo := time.Now().AddDate(0, 0, -3)
+	twoDaysAgo := time.Now().AddDate(0, 0, -2)
 
 	var foundUrls map[string]struct{}
 	var db *sql.DB
@@ -316,34 +319,36 @@ func main() {
 		}
 
 		for _, article := range articles {
+			pubDate, err := parseDate(article.Published)
+			if err != nil || pubDate.Before(twoDaysAgo) {
+				continue // Skip older articles
+			}
+
 			if _, exists := foundUrls[article.Link]; !exists {
-				pubDate, err := parseDate(article.Published)
-				if err != nil || pubDate.Before(threeDaysAgo) {
-					message := fmt.Sprintf("▶ %s\nPublished: %s\nLink: %s",
-						article.Title, article.Published, article.Link)
+				message := fmt.Sprintf("▶ %s\nPublished: %s\nLink: %s",
+					article.Title, article.Published, article.Link)
 
-					if sendToTelegramFlag {
-						sendToTelegram(message, TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
-					}
-
-					if useFile {
-						saveUrlToFile(article.Title, article.Link)
-					} else if useDatabase {
-						err = saveUrlToDB(db, article.Link)
-						if err != nil {
-							fmt.Println(color.RedString("Error saving URL to database: %s", err))
-						}
-					}
-
-					fmt.Println(color.GreenString(message))
-					fmt.Println()
-					articlesFound++
+				if sendToTelegramFlag {
+					sendToTelegram(message, TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
 				}
+
+				if useFile {
+					saveUrlToFile(article.Title, article.Link)
+				} else if useDatabase {
+					err = saveUrlToDB(db, article.Link)
+					if err != nil {
+						fmt.Println(color.RedString("Error saving URL to database: %s", err))
+					}
+				}
+
+				fmt.Println(color.GreenString(message))
+				fmt.Println()
+				articlesFound++
 			}
 		}
 	}
 
-	printPretty(fmt.Sprintf("Total new articles found: %d", articlesFound), color.FgCyan, false)
-	printPretty("Writeup Finder Script Completed", color.FgGreen, true)
+	printPretty(fmt.Sprintf("Total new articles found: %d", articlesFound), color.FgYellow, false)
+	printPretty("Writeup Finder Script Completed", color.FgHiYellow, true)
 	updateLastCheckTime()
 }
