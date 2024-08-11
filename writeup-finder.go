@@ -38,6 +38,8 @@ var useFile bool
 var useDatabase bool
 var sendToTelegramFlag bool
 
+const dataFolder = "data/"
+
 func init() {
 	// Load the .env file
 	err := godotenv.Load()
@@ -47,7 +49,7 @@ func init() {
 }
 
 func updateLastCheckTime() {
-	file, err := os.Create("last-check.txt")
+	file, err := os.Create(dataFolder + "last-check.txt")
 	if err != nil {
 		fmt.Println(color.RedString("Error creating file: %s", err))
 		return
@@ -59,7 +61,7 @@ func updateLastCheckTime() {
 }
 
 func readUrls() []string {
-	file, err := os.Open("url.txt")
+	file, err := os.Open(dataFolder + "url.txt")
 	if err != nil {
 		fmt.Println(color.RedString("Error reading URL file: %s", err))
 		return nil
@@ -134,7 +136,7 @@ func saveUrlToDB(db *sql.DB, url string) error {
 
 func readFoundUrlsFromFile() map[string]struct{} {
 	foundUrls := make(map[string]struct{})
-	file, err := os.Open("found-url.json")
+	file, err := os.Open(dataFolder + "found-url.json")
 	if err != nil {
 		return foundUrls
 	}
@@ -145,7 +147,6 @@ func readFoundUrlsFromFile() map[string]struct{} {
 	err = decoder.Decode(&data)
 	if err != nil {
 		if err == io.EOF {
-			// File is empty, return an empty map
 			return foundUrls
 		}
 		fmt.Println(color.RedString("Error decoding found URL JSON file: %s", err))
@@ -160,7 +161,7 @@ func readFoundUrlsFromFile() map[string]struct{} {
 }
 
 func saveUrlToFile(title string, url string) {
-	file, err := os.OpenFile("found-url.json", os.O_RDWR|os.O_CREATE, 0644)
+	file, err := os.OpenFile(dataFolder+"found-url.json", os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		fmt.Println(color.RedString("Error opening found URL JSON file: %s", err))
 		return
@@ -175,18 +176,15 @@ func saveUrlToFile(title string, url string) {
 		return
 	}
 
-	// If the file was empty, initialize the list
 	if err == io.EOF {
 		data.Urls = []UrlEntry{}
 	}
 
-	// Add the new title and URL
 	newEntry := UrlEntry{Title: title, Url: url}
 	data.Urls = append(data.Urls, newEntry)
 
-	// Move the file pointer to the beginning to overwrite the file
 	file.Seek(0, 0)
-	file.Truncate(0) // Clear the file before writing the updated content
+	file.Truncate(0)
 	encoder := json.NewEncoder(file)
 	err = encoder.Encode(data)
 	if err != nil {
