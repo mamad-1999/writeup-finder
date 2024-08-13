@@ -286,7 +286,7 @@ func main() {
 	printPretty("Starting Writeup Finder Script", color.FgHiYellow, true)
 
 	urls := readUrls()
-	twoDaysAgo := time.Now().AddDate(0, 0, -2)
+	today := time.Now()
 
 	var foundUrls map[string]struct{}
 	var db *sql.DB
@@ -318,8 +318,8 @@ func main() {
 
 		for _, article := range articles {
 			pubDate, err := parseDate(article.Published)
-			if err != nil || pubDate.Before(twoDaysAgo) {
-				continue // Skip older articles
+			if err != nil || pubDate.Format("2006-01-02") != today.Format("2006-01-02") {
+				continue // Skip articles not published today
 			}
 
 			if _, exists := foundUrls[article.Link]; !exists {
