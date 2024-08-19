@@ -324,7 +324,7 @@ func main() {
 
 			if _, exists := foundUrls[article.Link]; !exists {
 				message := fmt.Sprintf("▶ %s\nPublished: %s\nLink: %s",
-					article.Title, article.Published, article.Link)
+					article.Title, article.Published, article.GUID)
 
 				if sendToTelegramFlag {
 					sendToTelegram(message, TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
