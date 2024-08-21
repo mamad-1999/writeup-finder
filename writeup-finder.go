@@ -247,6 +247,28 @@ func sendToTelegram(message string, botToken string, channelID string, proxyURL 
 	}
 }
 
+func validateProxyURL(proxyURL string) error {
+	parsedURL, err := url.Parse(proxyURL)
+	if err != nil {
+		return err
+	}
+
+	// Check if the scheme is one of the allowed proxy schemes
+	switch parsedURL.Scheme {
+	case "http", "https", "socks5":
+		// valid scheme
+	default:
+		return fmt.Errorf("unsupported proxy scheme: %s", parsedURL.Scheme)
+	}
+
+	// Ensure the hostname is not empty
+	if parsedURL.Hostname() == "" {
+		return fmt.Errorf("missing hostname or IP address in proxy URL")
+	}
+
+	return nil
+}
+
 func main() {
 	flag.BoolVar(&useFile, "f", false, "Save new articles in found-url.txt")
 	flag.BoolVar(&useDatabase, "d", false, "Save new articles in the database")
@@ -256,6 +278,20 @@ func main() {
 
 	if !useFile && !useDatabase {
 		log.Fatal("You must specify either -f (file) or -d (database)")
+	}
+
+	if useFile && useDatabase {
+		log.Fatal("Error: Please specify only one of -f (file) or -d (database), not both.")
+	}
+
+	if proxyURL != "" {
+		if !sendToTelegramFlag {
+			log.Fatal("Error: --proxy option is only valid when used with -t (send to Telegram).")
+		}
+		err := validateProxyURL(proxyURL)
+		if err != nil {
+			log.Fatalf("Error: Invalid proxy URL: %s", err)
+		}
 	}
 
 	TELEGRAM_BOT_TOKEN := os.Getenv("TELEGRAM_BOT_TOKEN")
