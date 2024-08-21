@@ -43,31 +43,32 @@ var proxyURL string
 const dataFolder = "data/"
 
 func init() {
-	// Load the .env file
 	err := godotenv.Load()
+	handleError(err, "Error loading .env file", true)
+}
+
+func handleError(err error, message string, exit bool) {
 	if err != nil {
-		log.Fatalf("Error loading .env file")
+		fmt.Println(color.RedString("%s: %s", message, err))
+		if exit {
+			os.Exit(1)
+		}
 	}
 }
 
 func updateLastCheckTime() {
 	file, err := os.Create(dataFolder + "last-check.txt")
-	if err != nil {
-		fmt.Println(color.RedString("Error creating file: %s", err))
-		return
-	}
+	handleError(err, "Error creating last-check.txt file", false)
 	defer file.Close()
 
 	currentTime := time.Now().Format("2006-01-02 15:04:05")
-	file.WriteString(currentTime)
+	_, err = file.WriteString(currentTime)
+	handleError(err, "Error writing to last-check.txt file", false)
 }
 
 func readUrls() []string {
 	file, err := os.Open(dataFolder + "url.txt")
-	if err != nil {
-		fmt.Println(color.RedString("Error reading URL file: %s", err))
-		return nil
-	}
+	handleError(err, "Error reading URL file", false)
 	defer file.Close()
 
 	var urls []string
@@ -79,13 +80,9 @@ func readUrls() []string {
 		}
 	}
 
-	if err := scanner.Err(); err != nil {
-		fmt.Println(color.RedString("Error scanning URL file: %s", err))
-	}
+	handleError(scanner.Err(), "Error scanning URL file", false)
 	return urls
 }
-
-// Database functions
 
 func connectDB() (*sql.DB, error) {
 	dbUser := os.Getenv("DB_USER")
@@ -98,9 +95,7 @@ func connectDB() (*sql.DB, error) {
 		dbUser, dbPassword, dbHost, dbPort, dbName)
 
 	db, err := sql.Open("postgres", connStr)
-	if err != nil {
-		return nil, err
-	}
+	handleError(err, "Error opening database connection", true)
 
 	return db, nil
 }
@@ -109,32 +104,25 @@ func readFoundUrlsFromDB(db *sql.DB) (map[string]struct{}, error) {
 	foundUrls := make(map[string]struct{})
 
 	rows, err := db.Query("SELECT url FROM articles")
-	if err != nil {
-		return nil, err
-	}
+	handleError(err, "Error querying database", true)
 	defer rows.Close()
 
 	for rows.Next() {
 		var url string
-		if err := rows.Scan(&url); err != nil {
-			return nil, err
-		}
+		err := rows.Scan(&url)
+		handleError(err, "Error scanning row in database", false)
 		foundUrls[url] = struct{}{}
 	}
 
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
+	handleError(rows.Err(), "Error iterating over database rows", false)
 
 	return foundUrls, nil
 }
 
-func saveUrlToDB(db *sql.DB, url string) error {
+func saveUrlToDB(db *sql.DB, url string) {
 	_, err := db.Exec("INSERT INTO articles (url) VALUES ($1)", url)
-	return err
+	handleError(err, "Error saving URL to database", false)
 }
-
-// File-based functions
 
 func readFoundUrlsFromFile() map[string]struct{} {
 	foundUrls := make(map[string]struct{})
@@ -147,11 +135,8 @@ func readFoundUrlsFromFile() map[string]struct{} {
 	var data FoundUrls
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&data)
-	if err != nil {
-		if err == io.EOF {
-			return foundUrls
-		}
-		fmt.Println(color.RedString("Error decoding found URL JSON file: %s", err))
+	if err != nil && err != io.EOF {
+		handleError(err, "Error decoding found-url.json", false)
 		return foundUrls
 	}
 
@@ -164,17 +149,14 @@ func readFoundUrlsFromFile() map[string]struct{} {
 
 func saveUrlToFile(title string, url string) {
 	file, err := os.OpenFile(dataFolder+"found-url.json", os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		fmt.Println(color.RedString("Error opening found URL JSON file: %s", err))
-		return
-	}
+	handleError(err, "Error opening found-url.json file", false)
 	defer file.Close()
 
 	var data FoundUrls
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&data)
 	if err != nil && err != io.EOF {
-		fmt.Println(color.RedString("Error decoding found URL JSON file: %s", err))
+		handleError(err, "Error decoding found-url.json file", false)
 		return
 	}
 
@@ -189,20 +171,14 @@ func saveUrlToFile(title string, url string) {
 	file.Truncate(0)
 	encoder := json.NewEncoder(file)
 	err = encoder.Encode(data)
-	if err != nil {
-		fmt.Println(color.RedString("Error encoding to found URL JSON file: %s", err))
-	}
+	handleError(err, "Error encoding to found-url.json file", false)
 }
-
-// Common functions
 
 func fetchArticles(feedUrl string) ([]*gofeed.Item, error) {
 	fp := gofeed.NewParser()
 	feed, err := fp.ParseURL(feedUrl)
-	if err != nil {
-		return nil, err
-	}
-	return feed.Items, nil
+	handleError(err, fmt.Sprintf("Error fetching feed from %s", feedUrl), false)
+	return feed.Items, err
 }
 
 func parseDate(dateString string) (time.Time, error) {
@@ -210,6 +186,7 @@ func parseDate(dateString string) (time.Time, error) {
 	if err != nil {
 		t, err = time.Parse(time.RFC1123, dateString)
 	}
+	handleError(err, "Error parsing date", false)
 	return t, err
 }
 
@@ -218,8 +195,7 @@ func printPretty(message string, colorAttr color.Attribute, isTitle bool) {
 	colored := color.New(colorAttr).SprintFunc()
 
 	if isTitle {
-		width := 80 // Set the width for alignment
-		// Calculate padding
+		width := 80
 		padding := (width - len(message)) / 2
 		fmt.Println(colored(strings.Repeat("=", width)))
 		fmt.Printf("%s%s%s\n", strings.Repeat(" ", padding), colored(message), strings.Repeat(" ", width-len(message)-padding))
@@ -238,18 +214,12 @@ func sendToTelegram(message string, botToken string, channelID string, proxyURL 
 	}
 
 	jsonData, err := json.Marshal(telegramMessage)
-	if err != nil {
-		fmt.Println(color.RedString("Error marshalling Telegram message: %s", err))
-		return
-	}
+	handleError(err, "Error marshalling Telegram message", false)
 
 	var client *http.Client
 	if proxyURL != "" {
-		proxy, err := url.Parse(proxyURL) // Correct usage of url.Parse
-		if err != nil {
-			fmt.Println(color.RedString("Error parsing proxy URL: %s", err))
-			return
-		}
+		proxy, err := url.Parse(proxyURL)
+		handleError(err, "Error parsing proxy URL", false)
 		client = &http.Client{
 			Timeout: 30 * time.Second,
 			Transport: &http.Transport{
@@ -266,10 +236,7 @@ func sendToTelegram(message string, botToken string, channelID string, proxyURL 
 
 	for {
 		resp, err = client.Post(apiUrl, "application/json", bytes.NewBuffer(jsonData))
-		if err != nil {
-			fmt.Println(color.RedString("Error sending message to Telegram: %s", err))
-			return
-		}
+		handleError(err, "Error sending message to Telegram", false)
 		defer resp.Body.Close()
 
 		if resp.StatusCode == http.StatusOK {
@@ -316,14 +283,10 @@ func main() {
 		foundUrls = readFoundUrlsFromFile()
 	} else if useDatabase {
 		db, err = connectDB()
-		if err != nil {
-			log.Fatalf("Error connecting to database: %s", err)
-		}
+		handleError(err, "Error connecting to database", true)
 		defer db.Close()
 		foundUrls, err = readFoundUrlsFromDB(db)
-		if err != nil {
-			log.Fatalf("Error reading found URLs from database: %s", err)
-		}
+		handleError(err, "Error reading found URLs from database", true)
 	}
 
 	articlesFound := 0
@@ -332,14 +295,13 @@ func main() {
 		printPretty(fmt.Sprintf("Processing feed: %s", url), color.FgMagenta, false)
 		articles, err := fetchArticles(url)
 		if err != nil {
-			fmt.Println(color.RedString("Error fetching feed from %s: %s", url, err))
 			continue
 		}
 
 		for _, article := range articles {
 			pubDate, err := parseDate(article.Published)
 			if err != nil || pubDate.Format("2006-01-02") != today.Format("2006-01-02") {
-				continue // Skip articles not published today
+				continue
 			}
 
 			if _, exists := foundUrls[article.Link]; !exists {
@@ -353,10 +315,7 @@ func main() {
 				if useFile {
 					saveUrlToFile(article.Title, article.Link)
 				} else if useDatabase {
-					err = saveUrlToDB(db, article.Link)
-					if err != nil {
-						fmt.Println(color.RedString("Error saving URL to database: %s", err))
-					}
+					saveUrlToDB(db, article.Link)
 				}
 
 				fmt.Println(color.GreenString(message))
