@@ -56,16 +56,6 @@ func handleError(err error, message string, exit bool) {
 	}
 }
 
-func updateLastCheckTime() {
-	file, err := os.Create(dataFolder + "last-check.txt")
-	handleError(err, "Error creating last-check.txt file", false)
-	defer file.Close()
-
-	currentTime := time.Now().Format("2006-01-02 15:04:05")
-	_, err = file.WriteString(currentTime)
-	handleError(err, "Error writing to last-check.txt file", false)
-}
-
 func readUrls() []string {
 	file, err := os.Open(dataFolder + "url.txt")
 	handleError(err, "Error reading URL file", false)
@@ -327,5 +317,4 @@ func main() {
 
 	printPretty(fmt.Sprintf("Total new articles found: %d", articlesFound), color.FgYellow, false)
 	printPretty("Writeup Finder Script Completed", color.FgHiYellow, true)
-	updateLastCheckTime()
 }
