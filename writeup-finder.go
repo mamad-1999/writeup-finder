@@ -10,6 +10,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -37,6 +38,7 @@ type FoundUrls struct {
 var useFile bool
 var useDatabase bool
 var sendToTelegramFlag bool
+var proxyURL string
 
 const dataFolder = "data/"
 
@@ -227,8 +229,8 @@ func printPretty(message string, colorAttr color.Attribute, isTitle bool) {
 	}
 }
 
-func sendToTelegram(message string, botToken string, channelID string) {
-	url := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
+func sendToTelegram(message string, botToken string, channelID string, proxyURL string) {
+	apiUrl := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
 
 	telegramMessage := TelegramMessage{
 		ChatID: channelID,
@@ -241,12 +243,29 @@ func sendToTelegram(message string, botToken string, channelID string) {
 		return
 	}
 
+	var client *http.Client
+	if proxyURL != "" {
+		proxy, err := url.Parse(proxyURL) // Correct usage of url.Parse
+		if err != nil {
+			fmt.Println(color.RedString("Error parsing proxy URL: %s", err))
+			return
+		}
+		client = &http.Client{
+			Timeout: 30 * time.Second,
+			Transport: &http.Transport{
+				Proxy: http.ProxyURL(proxy),
+			},
+		}
+	} else {
+		client = &http.Client{}
+	}
+
 	var resp *http.Response
 	var retryCount int
 	maxRetries := 5
 
 	for {
-		resp, err = http.Post(url, "application/json", bytes.NewBuffer(jsonData))
+		resp, err = client.Post(apiUrl, "application/json", bytes.NewBuffer(jsonData))
 		if err != nil {
 			fmt.Println(color.RedString("Error sending message to Telegram: %s", err))
 			return
@@ -275,6 +294,7 @@ func main() {
 	flag.BoolVar(&useFile, "f", false, "Save new articles in found-url.txt")
 	flag.BoolVar(&useDatabase, "d", false, "Save new articles in the database")
 	flag.BoolVar(&sendToTelegramFlag, "t", false, "Send new articles to Telegram")
+	flag.StringVar(&proxyURL, "proxy", "", "Proxy URL to use for sending Telegram messages")
 	flag.Parse()
 
 	if !useFile && !useDatabase {
@@ -327,7 +347,7 @@ func main() {
 					article.Title, article.Published, article.GUID)
 
 				if sendToTelegramFlag {
-					sendToTelegram(message, TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
+					sendToTelegram(message, TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID, proxyURL)
 				}
 
 				if useFile {
