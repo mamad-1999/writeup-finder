@@ -341,7 +341,7 @@ func main() {
 				if useFile {
 					saveUrlToFile(article.Title, article.Link)
 				} else if useDatabase {
-					saveUrlToDB(db, article.Link)
+					saveUrlToDB(db, article.GUID)
 				}
 
 				fmt.Println(color.GreenString(message))
