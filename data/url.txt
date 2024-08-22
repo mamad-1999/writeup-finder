@@ -1,5 +1,10 @@
 https://medium.com/feed/tag/xss
-https://medium.com/feed/tag/owasp
+https://medium.com/feed/tag/owasp-top-10
+https://medium.com/feed/tag/owasp-web-security-testing-guide
+https://medium.com/feed/tag/penetration-testing-tools
+https://medium.com/feed/tag/penetration-testing-methodology
+https://medium.com/feed/tag/web-penetration-testing
+https://medium.com/feed/tag/network-penetration-testing
 https://medium.com/feed/tag/ssrf
 https://medium.com/feed/tag/sqli
 https://medium.com/feed/tag/cross-site-scripting
@@ -47,6 +52,8 @@ https://medium.com/feed/tag/recon
 https://medium.com/feed/tag/tryhackme
 https://medium.com/feed/tag/hackerone
 https://medium.com/feed/tag/api-security
+https://medium.com/feed/tag/appsec
+https://medium.com/feed/tag/web-application-security
 https://medium.com/feed/@NahamSec
 https://medium.com/feed/@jhaddix
 https://medium.com/feed/@TomNomNom
