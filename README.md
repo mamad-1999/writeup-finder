@@ -1,5 +1,17 @@
 # Writeup Finder
 
+[![Go Version](https://img.shields.io/badge/go-1.17%20%7C%201.18%20%7C%201.19%20%7C%201.20-blue)](https://golang.org/dl/)
+[![GitHub Issues](https://img.shields.io/github/issues/mamad-1999/writeup-finder)](https://github.com/mamad-1999/writeup-finder/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/mamad-1999/writeup-finder)](https://github.com/mamad-1999/writeup-finder/stargazers)
+[![GitHub License](https://img.shields.io/github/license/mamad-1999/writeup-finder)](https://github.com/mamad-1999/writeup-finder/blob/master/LICENSE)
+
+<p>
+    <a href="https://skillicons.dev">
+      <img src="https://github.com/tandpfun/skill-icons/blob/main/icons/GoLang.svg" width="48" title="Go">
+      <img src="https://github.com/tandpfun/skill-icons/blob/main/icons/Github-Dark.svg" width="48" title="github">
+    </a>
+</p>
+
 Writeup Finder is a tool designed to automatically find and save recent writeups from specified URLs. It supports saving the found writeups in a JSON file, a PostgreSQL database, or sending them directly to a Telegram channel.
 
 ## Features
