@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -22,8 +23,9 @@ import (
 )
 
 type TelegramMessage struct {
-	ChatID string `json:"chat_id"`
-	Text   string `json:"text"`
+	ChatID          string `json:"chat_id"`
+	Text            string `json:"text"`
+	MessageThreadID string `json:"message_thread_id,omitempty"`
 }
 
 type UrlEntry struct {
@@ -195,17 +197,29 @@ func printPretty(message string, colorAttr color.Attribute, isTitle bool) {
 	}
 }
 
-func sendToTelegram(message string, botToken string, channelID string, proxyURL string) {
+func sendToTelegram(message string, proxyURL string) {
+	// Load environment variables
+	err := godotenv.Load()
+	handleError(err, "Error loading .env file", true)
+
+	// Get environment variables
+	botToken := os.Getenv("TELEGRAM_BOT_TOKEN")
+	channelID := os.Getenv("CHAT_ID")
+	messageThreadID := os.Getenv("MESSAGE_THREAD_ID")
+
 	apiUrl := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
 
+	// Create the Telegram message
 	telegramMessage := TelegramMessage{
-		ChatID: channelID,
-		Text:   message,
+		ChatID:          channelID,
+		Text:            message,
+		MessageThreadID: messageThreadID,
 	}
 
 	jsonData, err := json.Marshal(telegramMessage)
 	handleError(err, "Error marshalling Telegram message", false)
 
+	// Setup the HTTP client with or without proxy
 	var client *http.Client
 	if proxyURL != "" {
 		proxy, err := url.Parse(proxyURL)
@@ -217,16 +231,34 @@ func sendToTelegram(message string, botToken string, channelID string, proxyURL 
 			},
 		}
 	} else {
-		client = &http.Client{}
+		client = &http.Client{
+			Timeout: 30 * time.Second,
+		}
 	}
 
+	// Attempt to send the message with retries
 	var resp *http.Response
 	var retryCount int
 	maxRetries := 5
 
 	for {
 		resp, err = client.Post(apiUrl, "application/json", bytes.NewBuffer(jsonData))
-		handleError(err, "Error sending message to Telegram", false)
+		if err != nil {
+			// Check for network timeout errors
+			if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+				fmt.Println(color.RedString("Network timeout, retrying..."))
+				retryCount++
+				if retryCount > maxRetries {
+					fmt.Println(color.RedString("Max retries reached. Failed to send message to Telegram."))
+					return
+				}
+				time.Sleep(time.Second * 2)
+				continue
+			}
+
+			handleError(err, "Error sending message to Telegram", false)
+			return
+		}
 		defer resp.Body.Close()
 
 		if resp.StatusCode == http.StatusOK {
@@ -293,9 +325,6 @@ func main() {
 			log.Fatalf("Error: Invalid proxy URL: %s", err)
 		}
 	}
-
-	TELEGRAM_BOT_TOKEN := os.Getenv("TELEGRAM_BOT_TOKEN")
-	TELEGRAM_CHANNEL_ID := os.Getenv("TELEGRAM_CHANNEL_ID")
 	printPretty("Starting Writeup Finder Script", color.FgHiYellow, true)
 
 	urls := readUrls()
@@ -335,7 +364,7 @@ func main() {
 					article.Title, article.Published, article.GUID)
 
 				if sendToTelegramFlag {
-					sendToTelegram(message, TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID, proxyURL)
+					sendToTelegram(message, proxyURL)
 				}
 
 				if useFile {
