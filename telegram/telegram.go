@@ -20,13 +20,18 @@ type TelegramMessage struct {
 	MessageThreadID string `json:"message_thread_id,omitempty"`
 }
 
+const (
+	maxRetries    = 5
+	retryDelay    = 2 * time.Second
+	rateLimitBase = 2
+)
+
 func SendToTelegram(message string, proxyURL string) {
-	botToken := os.Getenv("TELEGRAM_BOT_TOKEN")
-	channelID := os.Getenv("CHAT_ID")
-	messageThreadID := os.Getenv("MESSAGE_THREAD_ID")
+	botToken := getEnv("TELEGRAM_BOT_TOKEN")
+	channelID := getEnv("CHAT_ID")
+	messageThreadID := getEnv("MESSAGE_THREAD_ID")
 
-	apiUrl := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
-
+	apiURL := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
 	telegramMessage := TelegramMessage{
 		ChatID:          channelID,
 		Text:            message,
@@ -34,48 +39,61 @@ func SendToTelegram(message string, proxyURL string) {
 	}
 
 	jsonData, err := json.Marshal(telegramMessage)
-	utils.HandleError(err, "Error marshalling Telegram message", false)
+	if err != nil {
+		utils.HandleError(err, "Error marshalling Telegram message", false)
+		return
+	}
 
 	client := utils.CreateHttpClient(proxyURL)
-
-	var resp *http.Response
-	var retryCount int
-	maxRetries := 5
+	retryCount := 0
 
 	for {
-		resp, err = client.Post(apiUrl, "application/json", bytes.NewBuffer(jsonData))
+		err := sendRequest(client, apiURL, jsonData, &retryCount)
 		if err != nil {
-			if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-				fmt.Println(color.RedString("Network timeout, retrying..."))
-				retryCount++
-				if retryCount > maxRetries {
-					fmt.Println(color.RedString("Max retries reached. Failed to send message to Telegram."))
-					return
-				}
-				time.Sleep(time.Second * 2)
-				continue
-			}
-			utils.HandleError(err, "Error sending message to Telegram", false)
-			return
-		}
-		defer resp.Body.Close()
-
-		if resp.StatusCode == http.StatusOK {
-			break
-		} else if resp.StatusCode == http.StatusTooManyRequests {
-			retryAfter := time.Duration(2<<retryCount) * time.Second
-			fmt.Println(color.YellowString("Rate limit exceeded, retrying after %v...", retryAfter))
-			time.Sleep(retryAfter)
-			retryCount++
-			if retryCount > maxRetries {
-				fmt.Println(color.RedString("Max retries reached. Failed to send message to Telegram."))
+			if retryCount >= maxRetries {
+				utils.HandleError(err, "Failed to send message to Telegram after retries", false)
 				return
 			}
-		} else {
-			fmt.Println(color.RedString("Failed to send message to Telegram, status code: %d", resp.StatusCode))
-			return
+			time.Sleep(retryDelay) // Wait before retrying
+			continue
 		}
+		break // Exit the loop if request was successful
 	}
+}
+
+func sendRequest(client *http.Client, apiURL string, jsonData []byte, retryCount *int) error {
+	resp, err := client.Post(apiURL, "application/json", bytes.NewBuffer(jsonData))
+	if err != nil {
+		if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+			fmt.Println(color.RedString("Network timeout, retrying..."))
+			(*retryCount)++
+			return err // Return the error to trigger a retry
+		}
+		return err // Return the error for non-retryable errors
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		return nil // Success, no need to retry
+	}
+
+	if resp.StatusCode == http.StatusTooManyRequests {
+		retryAfter := time.Duration(rateLimitBase<<*retryCount) * time.Second
+		fmt.Println(color.YellowString("Rate limit exceeded, retrying after %v...", retryAfter))
+		(*retryCount)++
+		time.Sleep(retryAfter)
+		return fmt.Errorf("rate limit exceeded")
+	}
+
+	return fmt.Errorf("failed to send message, status code: %d", resp.StatusCode)
+}
+
+func getEnv(key string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		utils.HandleError(fmt.Errorf("environment variable %s not set", key), "Missing environment variable", false)
+	}
+	return value
 }
 
 func ValidateProxyURL(proxyURL string) error {
