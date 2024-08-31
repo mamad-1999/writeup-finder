@@ -6,21 +6,20 @@ import (
 	"time"
 )
 
-func CreateHttpClient(proxyURL string) *http.Client {
-	var client *http.Client
+func CreateHTTPClient(proxyURL string) *http.Client {
+	client := &http.Client{
+		Timeout: 30 * time.Second,
+	}
 
 	if proxyURL != "" {
 		proxy, err := url.Parse(proxyURL)
-		HandleError(err, "Error parsing proxy URL", false)
-		client = &http.Client{
-			Timeout: 30 * time.Second,
-			Transport: &http.Transport{
-				Proxy: http.ProxyURL(proxy),
-			},
+		if err != nil {
+			HandleError(err, "Error parsing proxy URL", false)
+			// In case of an error, return the client without proxy settings
+			return client
 		}
-	} else {
-		client = &http.Client{
-			Timeout: 30 * time.Second,
+		client.Transport = &http.Transport{
+			Proxy: http.ProxyURL(proxy),
 		}
 	}
 

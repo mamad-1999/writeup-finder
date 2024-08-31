@@ -44,7 +44,7 @@ func SendToTelegram(message string, proxyURL string) {
 		return
 	}
 
-	client := utils.CreateHttpClient(proxyURL)
+	client := utils.CreateHTTPClient(proxyURL)
 	retryCount := 0
 
 	for {

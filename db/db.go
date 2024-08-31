@@ -9,6 +9,7 @@ import (
 	"writeup-finder.go/utils"
 )
 
+// ConnectDB establishes a connection to the PostgreSQL database using environment variables.
 func ConnectDB() (*sql.DB, error) {
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
@@ -28,7 +29,7 @@ func ConnectDB() (*sql.DB, error) {
 		return nil, fmt.Errorf("error opening database connection: %w", err)
 	}
 
-	// Attempt to ping the database to ensure connectivity
+	// Ping the database to ensure connectivity
 	if err := db.Ping(); err != nil {
 		return nil, fmt.Errorf("error pinging database: %w", err)
 	}
@@ -48,16 +49,16 @@ func ReadFoundUrlsFromDB(db *sql.DB) (map[string]struct{}, error) {
 
 	for rows.Next() {
 		var url string
-		err := rows.Scan(&url)
-		if err != nil {
+		if err := rows.Scan(&url); err != nil {
 			utils.HandleError(err, "Error scanning row in database", false)
 			continue
 		}
 		foundUrls[url] = struct{}{}
 	}
 
-	if err = rows.Err(); err != nil {
+	if err := rows.Err(); err != nil {
 		utils.HandleError(err, "Error iterating over database rows", false)
+		return nil, err
 	}
 
 	return foundUrls, nil
