@@ -87,6 +87,7 @@ Writeup Finder is a tool designed to automatically find and save recent writeups
 You can use `CRON` to run script every *hours, *days, or etc.
 
 #### Example for run script every 3 hour
+More read: [How to Automate Tasks with cron Jobs in Linux](https://www.freecodecamp.org/news/cron-jobs-in-linux/)
 ```bash
     0 */3 * * * cd /path/to/your/script && /usr/local/go/bin/go run /path/to/your/project/main.go -d -t
 ```
