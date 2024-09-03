@@ -63,8 +63,11 @@ Writeup Finder is a tool designed to automatically find and save recent writeups
     DB_HOST=<your_db_host>
     DB_PORT=<your_db_port>
     DB_NAME=<your_db_name>
+    
     TELEGRAM_BOT_TOKEN=<your_telegram_bot_token>
     TELEGRAM_CHANNEL_ID=<your_telegram_channel_id>
+    CHAT_ID=<CHAT_ID> # in the group
+    MESSAGE_THREAD_ID=<MESSAGE_TREAD_ID> # superGroup Topic
     ```
 4. Update the `url.txt` file with the URLs you want to monitor.
 5. Run the tool with the desired flags.
@@ -74,8 +77,8 @@ Writeup Finder is a tool designed to automatically find and save recent writeups
 ```bash
 go run main.go -f  # Save to JSON file
 go run main.go -d  # Save to PostgreSQL database
-go run main.go -t  # Send new writeups to Telegram
+go run main.go [-d / -f] -t  # Send new writeups to Telegram
+go run main.go [-d / -f] -t --proxy=PROTOCOL://HOSTNAME:PORT #proxy just work for telegram send message [-t]
 ```
 
-
-You can use Cron for to run script every *hours, *days, or etc.
+You can use `CRON` to run script every *hours, *days, or etc.
