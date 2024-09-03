@@ -21,6 +21,31 @@ Writeup Finder is a tool designed to automatically find and save recent writeups
 - Optionally send notifications of new writeups to a Telegram channel.
 - Configurable through flags for different output methods.
 
+
+```
+├── .env
+├── .gitignore
+├── README.md
+├── config/
+│   ├── env.go
+├── data/
+│   ├── found-url.json
+│   ├── url.txt
+├── db/
+│   ├── db.go
+├── directory_structure.md
+├── go.mod
+├── go.sum
+├── main.go
+├── rss/
+│   ├── fetch.go
+├── telegram/
+│   ├── telegram.go
+├── utils/
+    ├── http.go
+    ├── utils.go
+```
+
 ## Requirements
 
 - Go 1.16+
