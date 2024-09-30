@@ -19,14 +19,12 @@ import (
 )
 
 const (
-	dataFolder   = "data/"
-	urlFile      = dataFolder + "url.txt"
-	foundUrlFile = dataFolder + "found-url.json"
-	dateFormat   = "2006-01-02"
+	dataFolder = "data/"
+	urlFile    = dataFolder + "url.txt"
+	dateFormat = "2006-01-02"
 )
 
 var (
-	useFile            bool
 	useDatabase        bool
 	sendToTelegramFlag bool
 	proxyURL           string
@@ -65,8 +63,6 @@ func main() {
 }
 
 func parseFlags() {
-	flag.BoolVar(&useFile, "f", false, "Save new articles in found-url.json")
-	flag.BoolVar(&useFile, "file", false, "Save new articles in found-url.json")
 	flag.BoolVar(&useDatabase, "d", false, "Save new articles in the database")
 	flag.BoolVar(&useDatabase, "database", false, "Save new articles in the database")
 	flag.BoolVar(&sendToTelegramFlag, "t", false, "Send new articles to Telegram")
@@ -85,7 +81,6 @@ func parseFlags() {
 func printHelp() {
 	fmt.Println("Usage: writeup-finder [OPTIONS]")
 	fmt.Println("\nOptions:")
-	fmt.Println("  -f            Save new articles in found-url.txt")
 	fmt.Println("  -d            Save new articles in the database")
 	fmt.Println("  -t            Send new articles to Telegram")
 	fmt.Println("  --proxy URL   Proxy URL to use for sending Telegram messages (only valid with -t)")
@@ -95,12 +90,8 @@ func printHelp() {
 }
 
 func validateFlags() {
-	if !useFile && !useDatabase {
-		log.Fatal("You must specify either -f (file) or -d (database)")
-	}
-
-	if useFile && useDatabase {
-		log.Fatal("Error: Please specify only one of -f (file) or -d (database), not both.")
+	if !useDatabase {
+		log.Fatal("You must specify -d (database)")
 	}
 
 	if proxyURL != "" && !sendToTelegramFlag {
@@ -167,10 +158,8 @@ func handleArticle(item *gofeed.Item, message string, database *sql.DB) error {
 	if sendToTelegramFlag {
 		telegram.SendToTelegram(message, proxyURL)
 	}
-	if useFile {
-		utils.SaveUrlToFile(foundUrlFile, item.Title, item.GUID)
 
-	} else if useDatabase {
+	if useDatabase {
 		db.SaveUrlToDB(database, item.GUID, item.Title)
 
 	}

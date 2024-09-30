@@ -2,81 +2,13 @@ package utils
 
 import (
 	"bufio"
-	"encoding/json"
 	"fmt"
-	"io"
 	"os"
 	"strings"
 	"time"
 
 	"github.com/fatih/color"
 )
-
-// UrlEntry represents a single URL entry with a title and URL.
-type UrlEntry struct {
-	Title string `json:"title"`
-	URL   string `json:"url"`
-}
-
-// FoundUrls holds a slice of URL entries.
-type FoundUrls struct {
-	Urls []UrlEntry `json:"urls"`
-}
-
-// ReadFoundUrlsFromFile reads URL entries from a JSON file and returns a map of URLs.
-func ReadFoundUrlsFromFile(filePath string) map[string]struct{} {
-	foundUrls := make(map[string]struct{})
-
-	file, err := os.Open(filePath)
-	if err != nil {
-		HandleError(err, "Error opening found-url.json file", false)
-		return foundUrls
-	}
-	defer file.Close()
-
-	var data FoundUrls
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&data); err != nil && err != io.EOF {
-		HandleError(err, "Error decoding found-url.json file", false)
-		return foundUrls
-	}
-
-	for _, entry := range data.Urls {
-		foundUrls[entry.URL] = struct{}{}
-	}
-
-	return foundUrls
-}
-
-// SaveUrlToFile appends a new URL entry to the JSON file.
-func SaveUrlToFile(filePath, title, url string) {
-	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		HandleError(err, "Error opening found-url.json file", false)
-		return
-	}
-	defer file.Close()
-
-	var data FoundUrls
-	decoder := json.NewDecoder(file)
-	if err := decoder.Decode(&data); err != nil && err != io.EOF {
-		HandleError(err, "Error decoding found-url.json file", false)
-		return
-	}
-
-	if err == io.EOF {
-		data.Urls = []UrlEntry{}
-	}
-
-	data.Urls = append(data.Urls, UrlEntry{Title: title, URL: url})
-
-	file.Seek(0, io.SeekStart)
-	file.Truncate(0)
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(data); err != nil {
-		HandleError(err, "Error encoding to found-url.json file", false)
-	}
-}
 
 // ReadUrls reads a list of URLs from a text file and returns them as a slice of strings.
 func ReadUrls(filePath string) []string {

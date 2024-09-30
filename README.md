@@ -12,15 +12,14 @@
     </a>
 </p>
 
-Writeup Finder is a tool designed to automatically find and save recent writeups from specified URLs. It supports saving the found writeups in a JSON file, a PostgreSQL database, or sending them directly to a Telegram channel.
+Writeup Finder is a tool designed to automatically find and save recent writeups from specified URLs. It supports saving the found writeups in a PostgreSQL database, and sending them directly to a Telegram channel Or group.
 
 ## Features
 
 - Fetch recent writeups from multiple URLs.
-- Save writeups to a JSON file or a PostgreSQL database.
+- Save writeups to a PostgreSQL database.
 - Optionally send notifications of new writeups to a Telegram channel.
 - Configurable through flags for different output methods.
-
 
 ```
 ├── .env
@@ -29,7 +28,6 @@ Writeup Finder is a tool designed to automatically find and save recent writeups
 ├── config/
 │   ├── env.go
 ├── data/
-│   ├── found-url.json
 │   ├── url.txt
 ├── db/
 │   ├── db.go
@@ -57,37 +55,39 @@ Writeup Finder is a tool designed to automatically find and save recent writeups
 1. Clone the repository.
 2. Install dependencies using `go mod tidy`.
 3. Create a `.env` file with the following variables:
-    ```bash
-    # Database Configuration
-    DB_USER=<your_db_user>             # Your database username
-    DB_PASSWORD=<your_db_password>     # Your database password
-    DB_HOST=<your_db_host>             # The hostname of your database server
-    DB_PORT=<your_db_port>             # The port number for your database connection
-    DB_NAME=<your_db_name>             # The name of your database
 
-    # Telegram Configuration
-    TELEGRAM_BOT_TOKEN=<your_telegram_bot_token>      # Your Telegram bot's token
-    TELEGRAM_CHANNEL_ID=<your_telegram_channel_id>    # The ID of your Telegram channel
-    CHAT_ID=<CHAT_ID>                                 # The ID of the chat group
-    MESSAGE_THREAD_ID=<MESSAGE_THREAD_ID>             # The ID of the message thread (for supergroups with topics)
-    ```
+   ```bash
+   # Database Configuration
+   DB_USER=<your_db_user>             # Your database username
+   DB_PASSWORD=<your_db_password>     # Your database password
+   DB_HOST=<your_db_host>             # The hostname of your database server
+   DB_PORT=<your_db_port>             # The port number for your database connection
+   DB_NAME=<your_db_name>             # The name of your database
+
+   # Telegram Configuration
+   TELEGRAM_BOT_TOKEN=<your_telegram_bot_token>      # Your Telegram bot's token
+   TELEGRAM_CHANNEL_ID=<your_telegram_channel_id>    # The ID of your Telegram channel
+   CHAT_ID=<CHAT_ID>                                 # The ID of the chat group
+   MESSAGE_THREAD_ID=<MESSAGE_THREAD_ID>             # The ID of the message thread (for supergroups with topics)
+   ```
+
 4. Update the `url.txt` file with the URLs you want to monitor.
 5. Run the tool with the desired flags.
 
 ## Usage
 
-| Command                                                                 | Description                                      |
-|-------------------------------------------------------------------------|--------------------------------------------------|
-| `go run main.go -f`                                                     | Save to JSON file                                |
-| `go run main.go -d`                                                     | Save to PostgreSQL database                      |
-| `go run main.go [-d / -f] -t`                                           | Send new writeups to Telegram                    |
-| `go run main.go [-d / -f] -t --proxy=PROTOCOL://HOSTNAME:PORT`          | Send to Telegram with proxy support              |
-
+| Command                                                   | Description                         |
+| --------------------------------------------------------- | ----------------------------------- |
+| `go run main.go -d`                                       | Save to PostgreSQL database         |
+| `go run main.go [-d] -t`                                  | Send new writeups to Telegram       |
+| `go run main.go [-d] -t --proxy=PROTOCOL://HOSTNAME:PORT` | Send to Telegram with proxy support |
 
 You can use `CRON` to run script every *hours, *days, or etc.
 
 #### Example for run script every 3 hour
+
 More read: [How to Automate Tasks with cron Jobs in Linux](https://www.freecodecamp.org/news/cron-jobs-in-linux/)
+
 ```bash
     0 */3 * * * cd /path/to/your/script && /usr/local/go/bin/go run /path/to/your/project/main.go -d -t
 ```
