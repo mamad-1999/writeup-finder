@@ -23,7 +23,7 @@ if check_proxy; then
     # Run the barcelona-watch script with the proxy
     cd "$SCRIPT_PATH" || { echo "Failed to change directory to $SCRIPT_PATH"; exit 1; }
     
-    go run main.go -d -t --proxy="$PROXY"
+    go run main.go --d --t --proxy="$PROXY"
 
 else
     echo "Proxy is down, skipping this attempt."

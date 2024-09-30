@@ -1,6 +1,7 @@
 package rss
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/mmcdole/gofeed"
@@ -11,7 +12,18 @@ import (
 func FetchArticles(feedURL string) ([]*gofeed.Item, error) {
 	parser := gofeed.NewParser()
 	feed, err := parser.ParseURL(feedURL)
-	utils.HandleError(err, "Error fetching feed", false)
+
+	// Handle error when fetching feed fails
+	if err != nil {
+		utils.HandleError(err, "Error fetching feed", false)
+		return nil, err // Return early to avoid nil dereference
+	}
+
+	// Check if feed is nil
+	if feed == nil {
+		return nil, fmt.Errorf("no feed data received from URL: %s", feedURL)
+	}
+
 	return feed.Items, nil
 }
 

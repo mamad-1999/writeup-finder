@@ -1,52 +1,124 @@
 package command
 
 import (
-	"flag"
 	"fmt"
-	"log"
 	"os"
+	"time"
 
+	"github.com/fatih/color"
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"writeup-finder.go/config"
+	"writeup-finder.go/db"
 	"writeup-finder.go/global"
+	"writeup-finder.go/url"
+	"writeup-finder.go/utils"
 )
 
-func ManageFlags() {
-	ParseFlags()
-	ValidateFlags()
+var rootCmd = &cobra.Command{
+	Use:   "writeup-finder",
+	Short: "A tool to find writeups and manage articles",
+	Long:  `Writeup-finder is a tool to search for writeups and manage article data, including sending notifications.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if cmd.CalledAs() != "completion" {
+			config.LoadEnv()
+			ManageFlags()
+			utils.PrintPretty("Starting Writeup Finder Script", color.FgHiYellow, true)
+
+			if global.UseDatabase {
+				global.DB = db.ConnectDB()
+				db.CreateArticlesTable(global.DB)
+				defer global.DB.Close()
+			}
+			ManageAction()
+		}
+	},
 }
 
-func ParseFlags() {
-	flag.BoolVar(&global.UseDatabase, "d", false, "Save new articles in the database")
-	flag.BoolVar(&global.UseDatabase, "database", false, "Save new articles in the database")
-	flag.BoolVar(&global.SendToTelegramFlag, "t", false, "Send new articles to Telegram")
-	flag.BoolVar(&global.SendToTelegramFlag, "telegram", false, "Send new articles to Telegram")
-	flag.StringVar(&global.ProxyURL, "proxy", "", "Proxy URL to use for sending Telegram messages")
-	flag.BoolVar(&global.Help, "h", false, "Show help")
-	flag.BoolVar(&global.Help, "help", false, "Show help")
-	flag.Parse()
+var completionCmd = &cobra.Command{
+	Use:   "completion [bash|zsh]",
+	Short: "Generate autocompletion script",
+	Long: `To load completions:
 
-	if global.Help {
-		PrintHelp()
-		os.Exit(0) // Exit after printing help
+Bash:
+
+  $ source <(writeup-finder completion bash)
+
+Zsh:
+
+  $ source <(writeup-finder completion zsh)
+
+  # To load completions for each session, execute once:
+  # Linux:
+  $ writeup-finder completion zsh > "${fpath[1]}/_writeup-finder"
+  # macOS:
+  $ writeup-finder completion zsh > /usr/local/share/zsh/site-functions/_writeup-finder
+`,
+	Args: cobra.ExactArgs(1),
+	Run: func(cmd *cobra.Command, args []string) {
+		switch args[0] {
+		case "bash":
+			rootCmd.GenBashCompletion(os.Stdout)
+		case "zsh":
+			rootCmd.GenZshCompletion(os.Stdout)
+		default:
+			fmt.Println("Unsupported shell type. Please specify bash or zsh.")
+		}
+	},
+}
+
+// Execute runs the root command, to be called in main
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }
 
-func PrintHelp() {
-	fmt.Println("Usage: writeup-finder [OPTIONS]")
-	fmt.Println("\nOptions:")
-	fmt.Println("  -d            Save new articles in the database")
-	fmt.Println("  -t            Send new articles to Telegram")
-	fmt.Println("  --proxy URL   Proxy URL to use for sending Telegram messages (only valid with -t)")
-	fmt.Println("  -h, --help    Show this help message")
-	fmt.Println("\nNote: You must specify either -f (file) or -d (database), but not both.")
-	fmt.Println("      The --proxy option is only valid when using the -t (Telegram) flag.")
+// Initialize global variables and flags
+func init() {
+	rootCmd.PersistentFlags().BoolVar(&global.UseDatabase, "d", false, "Save new articles in the database")
+	rootCmd.PersistentFlags().BoolVar(&global.UseDatabase, "database", false, "Save new articles in the database")
+	rootCmd.PersistentFlags().BoolVar(&global.SendToTelegramFlag, "t", false, "Send new articles to Telegram")
+	rootCmd.PersistentFlags().BoolVar(&global.SendToTelegramFlag, "telegram", false, "Send new articles to Telegram")
+	rootCmd.PersistentFlags().StringVar(&global.ProxyURL, "proxy", "", "Proxy URL to use for sending Telegram messages")
+	rootCmd.PersistentFlags().BoolVar(&global.Help, "h", false, "Show help")
+	rootCmd.PersistentFlags().BoolVar(&global.Help, "help", false, "Show help")
+
+	rootCmd.AddCommand(completionCmd)
 }
 
+// ManageFlags handles the main logic after flag parsing
+func ManageFlags() {
+	ValidateFlags()
+
+	log.Infof("[+] Use Database: %v", global.UseDatabase)
+	log.Infof("[+] Send to Telegram: %v", global.SendToTelegramFlag)
+
+	if global.ProxyURL != "" {
+		log.Infof("[+] Proxy URL: %v", global.ProxyURL)
+	} else {
+		log.Info("[+] No Proxy URL set.")
+	}
+}
+
+// ValidateFlags checks the combination of flags and throws errors for invalid input
 func ValidateFlags() {
 	if !global.UseDatabase {
-		log.Fatal("You must specify -d (database)")
+		log.Fatal("You must specify -d (database) to save articles in the database.")
 	}
 
 	if global.ProxyURL != "" && !global.SendToTelegramFlag {
 		log.Fatal("Error: --proxy option is only valid when used with -t (send to Telegram).")
 	}
+}
+
+func ManageAction() {
+	urlList := utils.ReadUrls(global.UrlFile)
+	today := time.Now()
+
+	articlesFound := url.ProcessUrls(urlList, today, global.DB)
+
+	utils.PrintPretty(fmt.Sprintf("Total new articles found: %d", articlesFound), color.FgYellow, false)
+	utils.PrintPretty("Writeup Finder Script Completed", color.FgHiYellow, true)
 }
