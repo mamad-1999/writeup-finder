@@ -1,5 +1,7 @@
 package global
 
+import "database/sql"
+
 const (
 	DataFolder = "data/"
 	UrlFile    = DataFolder + "url.txt"
@@ -7,6 +9,7 @@ const (
 )
 
 var (
+	DB                 *sql.DB
 	UseDatabase        bool
 	SendToTelegramFlag bool
 	ProxyURL           string

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // Postgres driver
 	"github.com/sirupsen/logrus"
 	"writeup-finder.go/utils"
 )
