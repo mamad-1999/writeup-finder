@@ -9,6 +9,7 @@ import (
 
 	"writeup-finder.go/config"
 	"writeup-finder.go/db"
+	"writeup-finder.go/global"
 	"writeup-finder.go/rss"
 	"writeup-finder.go/telegram"
 	"writeup-finder.go/utils"
@@ -16,19 +17,6 @@ import (
 	"github.com/fatih/color"
 	"github.com/mmcdole/gofeed"
 	log "github.com/sirupsen/logrus"
-)
-
-const (
-	dataFolder = "data/"
-	urlFile    = dataFolder + "url.txt"
-	dateFormat = "2006-01-02"
-)
-
-var (
-	useDatabase        bool
-	sendToTelegramFlag bool
-	proxyURL           string
-	help               bool
 )
 
 func init() {
@@ -46,12 +34,12 @@ func main() {
 
 	utils.PrintPretty("Starting Writeup Finder Script", color.FgHiYellow, true)
 
-	urlList := utils.ReadUrls(urlFile)
+	urlList := utils.ReadUrls(global.UrlFile)
 	today := time.Now()
 
 	var database *sql.DB
 
-	if useDatabase {
+	if global.UseDatabase {
 		database = db.ConnectDB()
 		db.CreateArticlesTable(database)
 		defer database.Close()
@@ -64,16 +52,16 @@ func main() {
 }
 
 func parseFlags() {
-	flag.BoolVar(&useDatabase, "d", false, "Save new articles in the database")
-	flag.BoolVar(&useDatabase, "database", false, "Save new articles in the database")
-	flag.BoolVar(&sendToTelegramFlag, "t", false, "Send new articles to Telegram")
-	flag.BoolVar(&sendToTelegramFlag, "telegram", false, "Send new articles to Telegram")
-	flag.StringVar(&proxyURL, "proxy", "", "Proxy URL to use for sending Telegram messages")
-	flag.BoolVar(&help, "h", false, "Show help")
-	flag.BoolVar(&help, "help", false, "Show help")
+	flag.BoolVar(&global.UseDatabase, "d", false, "Save new articles in the database")
+	flag.BoolVar(&global.UseDatabase, "database", false, "Save new articles in the database")
+	flag.BoolVar(&global.SendToTelegramFlag, "t", false, "Send new articles to Telegram")
+	flag.BoolVar(&global.SendToTelegramFlag, "telegram", false, "Send new articles to Telegram")
+	flag.StringVar(&global.ProxyURL, "proxy", "", "Proxy URL to use for sending Telegram messages")
+	flag.BoolVar(&global.Help, "h", false, "Show help")
+	flag.BoolVar(&global.Help, "help", false, "Show help")
 	flag.Parse()
 
-	if help {
+	if global.Help {
 		printHelp()
 		os.Exit(0) // Exit after printing help
 	}
@@ -91,11 +79,11 @@ func printHelp() {
 }
 
 func validateFlags() {
-	if !useDatabase {
+	if !global.UseDatabase {
 		log.Fatal("You must specify -d (database)")
 	}
 
-	if proxyURL != "" && !sendToTelegramFlag {
+	if global.ProxyURL != "" && !global.SendToTelegramFlag {
 		log.Fatal("Error: --proxy option is only valid when used with -t (send to Telegram).")
 	}
 }
@@ -132,7 +120,7 @@ func processUrls(urlList []string, today time.Time, database *sql.DB) int {
 func isNewArticle(item *gofeed.Item, db *sql.DB, today time.Time) bool {
 	// Parse the publication date of the article
 	pubDate, err := rss.ParseDate(item.Published)
-	if err != nil || pubDate.Format(dateFormat) != today.Format(dateFormat) {
+	if err != nil || pubDate.Format(global.DateFormat) != today.Format(global.DateFormat) {
 		// Article is not from today
 		return false
 	}
@@ -152,11 +140,11 @@ func formatArticleMessage(item *gofeed.Item) string {
 }
 
 func handleArticle(item *gofeed.Item, message string, database *sql.DB) error {
-	if sendToTelegramFlag {
-		telegram.SendToTelegram(message, proxyURL)
+	if global.SendToTelegramFlag {
+		telegram.SendToTelegram(message, global.ProxyURL)
 	}
 
-	if useDatabase {
+	if global.UseDatabase {
 		db.SaveUrlToDB(database, item.GUID, item.Title)
 
 	}
