@@ -39,33 +39,6 @@ func ConnectDB() (*sql.DB, error) {
 	return db, nil
 }
 
-func ReadFoundTitlesFromDB(db *sql.DB) (map[string]struct{}, error) {
-	foundTitles := make(map[string]struct{})
-
-	rows, err := db.Query("SELECT title FROM articles")
-	if err != nil {
-		utils.HandleError(err, "Error querying database", true)
-		return nil, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var title string
-		if err := rows.Scan(&title); err != nil {
-			utils.HandleError(err, "Error scanning row in database", false)
-			continue
-		}
-		foundTitles[title] = struct{}{}
-	}
-
-	if err := rows.Err(); err != nil {
-		utils.HandleError(err, "Error iterating over database rows", false)
-		return nil, err
-	}
-
-	return foundTitles, nil
-}
-
 func SaveUrlToDB(db *sql.DB, url, title string) {
 	_, err := db.Exec("INSERT INTO articles (url, title) VALUES ($1, $2)", url, title)
 	if err != nil {

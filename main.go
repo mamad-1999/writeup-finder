@@ -46,27 +46,19 @@ func main() {
 	urlList := utils.ReadUrls(urlFile)
 	today := time.Now()
 
-	var foundTitles map[string]struct{}
 	var database *sql.DB
 	var err error
 
-	if useFile {
-		foundTitles = utils.ReadFoundUrlsFromFile(foundUrlFile)
-	} else if useDatabase {
+	if useDatabase {
 		database, err = db.ConnectDB()
 		db.CreateArticlesTable(database)
 		if err != nil {
 			log.Fatalf("Error connecting to database: %v", err)
 		}
 		defer database.Close()
-
-		foundTitles, err = db.ReadFoundTitlesFromDB(database)
-		if err != nil {
-			log.Fatalf("Error reading found URLs from database: %v", err)
-		}
 	}
 
-	articlesFound := processUrls(urlList, foundTitles, today, database)
+	articlesFound := processUrls(urlList, today, database)
 
 	utils.PrintPretty(fmt.Sprintf("Total new articles found: %d", articlesFound), color.FgYellow, false)
 	utils.PrintPretty("Writeup Finder Script Completed", color.FgHiYellow, true)
@@ -116,7 +108,7 @@ func validateFlags() {
 	}
 }
 
-func processUrls(urlList []string, foundTitles map[string]struct{}, today time.Time, database *sql.DB) int {
+func processUrls(urlList []string, today time.Time, database *sql.DB) int {
 	articlesFound := 0
 
 	for _, url := range urlList {
@@ -128,8 +120,8 @@ func processUrls(urlList []string, foundTitles map[string]struct{}, today time.T
 		}
 
 		for _, article := range articles {
-			// Check if the article's title is in foundTitles (instead of URL)
-			if isNewArticle(article, foundTitles, today) {
+			// Check if the article's title is new and if it was published today
+			if isNewArticle(article, database, today) {
 				message := formatArticleMessage(article)
 				if err := handleArticle(article, message, database); err != nil {
 					log.Printf("Error handling article %s: %v", article.GUID, err)
@@ -145,15 +137,25 @@ func processUrls(urlList []string, foundTitles map[string]struct{}, today time.T
 	return articlesFound
 }
 
-func isNewArticle(item *gofeed.Item, foundTitles map[string]struct{}, today time.Time) bool {
+func isNewArticle(item *gofeed.Item, db *sql.DB, today time.Time) bool {
 	// Parse the publication date of the article
 	pubDate, err := rss.ParseDate(item.Published)
 	if err != nil || pubDate.Format(dateFormat) != today.Format(dateFormat) {
+		// Article is not from today
 		return false
 	}
 
-	// Check if the title already exists in foundTitles
-	_, exists := foundTitles[item.Title]
+	// Query the database to check if the title already exists
+	var exists bool
+	query := "SELECT EXISTS(SELECT 1 FROM articles WHERE title = $1)"
+	err = db.QueryRow(query, item.Title).Scan(&exists)
+	if err != nil {
+		log.Printf("Error checking if article title exists in database: %v", err)
+		// Return false to prevent processing in case of error
+		return false
+	}
+
+	// Return true only if the article is from today and does not exist in the database
 	return !exists
 }
 
