@@ -13,10 +13,7 @@ import (
 // ReadUrls reads a list of URLs from a text file and returns them as a slice of strings.
 func ReadUrls(filePath string) []string {
 	file, err := os.Open(filePath)
-	if err != nil {
-		HandleError(err, "Error opening URL file", false)
-		return nil
-	}
+	HandleError(err, "Error opening URL file", false)
 	defer file.Close()
 
 	var urls []string

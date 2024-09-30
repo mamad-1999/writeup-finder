@@ -1,14 +1,12 @@
 package config
 
 import (
-	"log"
-
 	"github.com/joho/godotenv"
+	"writeup-finder.go/utils"
 )
 
 func LoadEnv() {
 	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %s", err)
-	}
+
+	utils.HandleError(err, "Error loading .env file:", true)
 }

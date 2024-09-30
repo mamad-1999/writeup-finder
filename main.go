@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -16,6 +15,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/mmcdole/gofeed"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -32,6 +32,11 @@ var (
 )
 
 func init() {
+	log.SetFormatter(&log.TextFormatter{
+		DisableTimestamp:       true,
+		DisableLevelTruncation: true,
+		FullTimestamp:          false,
+	})
 	config.LoadEnv()
 }
 
@@ -45,14 +50,10 @@ func main() {
 	today := time.Now()
 
 	var database *sql.DB
-	var err error
 
 	if useDatabase {
-		database, err = db.ConnectDB()
+		database = db.ConnectDB()
 		db.CreateArticlesTable(database)
-		if err != nil {
-			log.Fatalf("Error connecting to database: %v", err)
-		}
 		defer database.Close()
 	}
 
@@ -140,11 +141,7 @@ func isNewArticle(item *gofeed.Item, db *sql.DB, today time.Time) bool {
 	var exists bool
 	query := "SELECT EXISTS(SELECT 1 FROM articles WHERE title = $1)"
 	err = db.QueryRow(query, item.Title).Scan(&exists)
-	if err != nil {
-		log.Printf("Error checking if article title exists in database: %v", err)
-		// Return false to prevent processing in case of error
-		return false
-	}
+	utils.HandleError(err, "Error checking if article title exists in database", false)
 
 	// Return true only if the article is from today and does not exist in the database
 	return !exists

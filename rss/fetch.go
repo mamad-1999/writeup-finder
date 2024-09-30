@@ -11,10 +11,7 @@ import (
 func FetchArticles(feedURL string) ([]*gofeed.Item, error) {
 	parser := gofeed.NewParser()
 	feed, err := parser.ParseURL(feedURL)
-	if err != nil {
-		utils.HandleError(err, "Error fetching feed", false)
-		return nil, err
-	}
+	utils.HandleError(err, "Error fetching feed", false)
 	return feed.Items, nil
 }
 
@@ -24,9 +21,6 @@ func ParseDate(dateString string) (time.Time, error) {
 	if err != nil {
 		parsedTime, err = time.Parse(time.RFC1123, dateString)
 	}
-	if err != nil {
-		utils.HandleError(err, "Error parsing date", false)
-		return time.Time{}, err // Return zero value for time.Time to indicate error
-	}
+	utils.HandleError(err, "Error parsing date", false)
 	return parsedTime, nil
 }

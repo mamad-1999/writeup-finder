@@ -39,10 +39,7 @@ func SendToTelegram(message string, proxyURL string) {
 	}
 
 	jsonData, err := json.Marshal(telegramMessage)
-	if err != nil {
-		utils.HandleError(err, "Error marshalling Telegram message", false)
-		return
-	}
+	utils.HandleError(err, "Error marshalling Telegram message", false)
 
 	client := utils.CreateHTTPClient(proxyURL)
 	retryCount := 0
@@ -98,9 +95,7 @@ func getEnv(key string) string {
 
 func ValidateProxyURL(proxyURL string) error {
 	parsedURL, err := url.Parse(proxyURL)
-	if err != nil {
-		return err
-	}
+	utils.HandleError(err, "Error:", true)
 
 	switch parsedURL.Scheme {
 	case "http", "https", "socks5":
