@@ -1,18 +1,30 @@
 #!/bin/bash
 
-# Proxy address
-proxy_url="http://0.0.0.0:8086"
+# Define variables
+SCRIPT_PATH="$HOME/Videos/go/writeup-finder" # Change this to your actual script directory
+echo $PROXY
+echo $PROXY_HOST
+echo $PROXY_PORT
 
-# Run curl with a timeout of 5 seconds
-timeout 5 curl --silent --head --fail "$proxy_url" &> /dev/null
+# Function to check proxy connection
+check_proxy() {
+    nc -zv "$PROXY_HOST" "$PROXY_PORT" >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
-# Check the exit status of the curl command
-if [ $? -eq 124 ]; then
-  # Exit status 124 means the command timed out
-  echo "$(date) - Proxy is running (command did not finish within 5 seconds), starting the script..."
-  # Run the Go script with proxy
-  /usr/local/go/bin/go run main.go -d -t --proxy="$proxy_url"
+# Now, check the proxy connection
+if check_proxy; then
+    echo "Proxy is up, running the writeup-finder script..."
+
+    # Run the barcelona-watch script with the proxy
+    cd "$SCRIPT_PATH" || { echo "Failed to change directory to $SCRIPT_PATH"; exit 1; }
+    
+    go run main.go -d -t --proxy="$PROXY"
+
 else
-  echo "$(date) - Proxy is not available or finished quickly, skipping script execution."
+    echo "Proxy is down, skipping this attempt."
 fi
-
