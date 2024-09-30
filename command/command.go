@@ -77,12 +77,9 @@ func Execute() {
 
 // Initialize global variables and flags
 func init() {
-	rootCmd.PersistentFlags().BoolVar(&global.UseDatabase, "d", false, "Save new articles in the database")
 	rootCmd.PersistentFlags().BoolVar(&global.UseDatabase, "database", false, "Save new articles in the database")
-	rootCmd.PersistentFlags().BoolVar(&global.SendToTelegramFlag, "t", false, "Send new articles to Telegram")
 	rootCmd.PersistentFlags().BoolVar(&global.SendToTelegramFlag, "telegram", false, "Send new articles to Telegram")
 	rootCmd.PersistentFlags().StringVar(&global.ProxyURL, "proxy", "", "Proxy URL to use for sending Telegram messages")
-	rootCmd.PersistentFlags().BoolVar(&global.Help, "h", false, "Show help")
 	rootCmd.PersistentFlags().BoolVar(&global.Help, "help", false, "Show help")
 
 	rootCmd.AddCommand(completionCmd)
