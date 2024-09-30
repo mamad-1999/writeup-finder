@@ -34,13 +34,15 @@ func ConnectDB() (*sql.DB, error) {
 		return nil, fmt.Errorf("error pinging database: %w", err)
 	}
 
+	fmt.Println("[+] Database Successfully Established.")
+
 	return db, nil
 }
 
-func ReadFoundUrlsFromDB(db *sql.DB) (map[string]struct{}, error) {
-	foundUrls := make(map[string]struct{})
+func ReadFoundTitlesFromDB(db *sql.DB) (map[string]struct{}, error) {
+	foundTitles := make(map[string]struct{})
 
-	rows, err := db.Query("SELECT url FROM articles")
+	rows, err := db.Query("SELECT title FROM articles")
 	if err != nil {
 		utils.HandleError(err, "Error querying database", true)
 		return nil, err
@@ -48,12 +50,12 @@ func ReadFoundUrlsFromDB(db *sql.DB) (map[string]struct{}, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var url string
-		if err := rows.Scan(&url); err != nil {
+		var title string
+		if err := rows.Scan(&title); err != nil {
 			utils.HandleError(err, "Error scanning row in database", false)
 			continue
 		}
-		foundUrls[url] = struct{}{}
+		foundTitles[title] = struct{}{}
 	}
 
 	if err := rows.Err(); err != nil {
@@ -61,12 +63,28 @@ func ReadFoundUrlsFromDB(db *sql.DB) (map[string]struct{}, error) {
 		return nil, err
 	}
 
-	return foundUrls, nil
+	return foundTitles, nil
 }
 
-func SaveUrlToDB(db *sql.DB, url string) {
-	_, err := db.Exec("INSERT INTO articles (url) VALUES ($1)", url)
+func SaveUrlToDB(db *sql.DB, url, title string) {
+	_, err := db.Exec("INSERT INTO articles (url, title) VALUES ($1, $2)", url, title)
 	if err != nil {
-		utils.HandleError(err, "Error saving URL to database", false)
+		utils.HandleError(err, "Error saving URL and title to database", false)
 	}
+}
+
+func CreateArticlesTable(db *sql.DB) {
+	_, err := db.Exec(`
+		CREATE TABLE IF NOT EXISTS articles (
+			id SERIAL PRIMARY KEY, 
+			url VARCHAR(1000), 
+			title VARCHAR(1000)
+		);
+	`)
+	if err != nil {
+		utils.HandleError(err, "Error creating articles table", true)
+		return
+	}
+
+	fmt.Println("[+] Articles table created successfully.")
 }
