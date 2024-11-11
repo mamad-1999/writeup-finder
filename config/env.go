@@ -6,7 +6,7 @@ import (
 )
 
 func LoadEnv() {
-	err := godotenv.Load()
+	err := godotenv.Load("/home/mohammad/Videos/go/writeup-finder/.env")
 
 	utils.HandleError(err, "Error loading .env file:", true)
 }

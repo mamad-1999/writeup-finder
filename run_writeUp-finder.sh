@@ -1,11 +1,9 @@
 #!/bin/bash
 
+source /home/mohammad/Videos/go/proxy.env
+
 # Define variables
 SCRIPT_PATH="$HOME/Videos/go/writeup-finder" # Change this to your actual script directory
-echo $PROXY
-echo $PROXY_HOST
-echo $PROXY_PORT
-
 # Function to check proxy connection
 check_proxy() {
     nc -zv "$PROXY_HOST" "$PROXY_PORT" >/dev/null 2>&1
@@ -23,7 +21,7 @@ if check_proxy; then
     # Run the barcelona-watch script with the proxy
     cd "$SCRIPT_PATH" || { echo "Failed to change directory to $SCRIPT_PATH"; exit 1; }
     
-    go run main.go --database --telegram --proxy="$PROXY"
+    $HOME/Videos/go/writeup-finder/writeup-finder --database --telegram --proxy="$PROXY"
 
 else
     echo "Proxy is down, skipping this attempt."
