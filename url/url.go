@@ -68,7 +68,7 @@ func FormatArticleMessage(item *gofeed.Item) string {
 
 func HandleArticle(item *gofeed.Item, message string, database *sql.DB) error {
 	if global.SendToTelegramFlag {
-		telegram.SendToTelegram(message, global.ProxyURL)
+		telegram.SendToTelegram(message, global.ProxyURL, item.Title)
 	}
 
 	if global.UseDatabase {

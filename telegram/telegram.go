@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
+	"sort"
 	"time"
 
 	"github.com/fatih/color"
@@ -26,11 +28,46 @@ const (
 	rateLimitBase = 2
 )
 
-func SendToTelegram(message string, proxyURL string) {
+func SendToTelegram(message string, proxyURL string, title string) {
 	botToken := getEnv("TELEGRAM_BOT_TOKEN")
 	channelID := getEnv("CHAT_ID")
-	messageThreadID := getEnv("MESSAGE_THREAD_ID")
+	mainThreadID := getEnv("MAIN_THREAD_ID")
 
+	// Define keywords with priority levels and regex patterns
+	type keywordPattern struct {
+		pattern  *regexp.Regexp
+		threadID string
+		priority int
+	}
+
+	keywords := []keywordPattern{
+		{regexp.MustCompile(`(?i)\$[0-9]*|\bMoney\b|bounty|bounties`), getEnv("MONEY_THREAD_ID"), 1},
+		{regexp.MustCompile(`(?i)Bypass|waf|firewall(?:-bypass)?|waf-bypass`), getEnv("BYPASS_THREAD_ID"), 2},
+		{regexp.MustCompile(`(?i)Recon|reconnaissance|osint`), getEnv("RECON_THREAD_ID"), 3},
+		{regexp.MustCompile(`(?i)THM|TryHackMe`), getEnv("TRYHACKME_THREAD_ID"), 4},
+		{regexp.MustCompile(`(?i)HTB|HackTheBox`), getEnv("HACKTHEBOX_THREAD_ID"), 4},
+		{regexp.MustCompile(`(?i)Mobile|Android|iOS|iPhone|iPad|Phone|Tablet`), getEnv("MOBILE_THREAD_ID"), 4},
+		{regexp.MustCompile(`(?i)Portswigger`), getEnv("PORTSWIGGER_THREAD_ID"), 4},
+		{regexp.MustCompile(`(?i)Burp|Burp\s?suite|Burpsuite-Pro`), getEnv("BURPSUITE_THREAD_ID"), 4},
+	}
+
+	// Sort keywords by priority (lower number means higher priority)
+	sort.Slice(keywords, func(i, j int) bool {
+		return keywords[i].priority < keywords[j].priority
+	})
+
+	// Default to the main thread ID
+	messageThreadID := mainThreadID
+
+	// Find the first matching keyword in order of priority
+	for _, keyword := range keywords {
+		if keyword.pattern.MatchString(title) {
+			messageThreadID = keyword.threadID
+			break
+		}
+	}
+
+	// Send the message
 	apiURL := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
 	telegramMessage := TelegramMessage{
 		ChatID:          channelID,
