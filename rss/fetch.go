@@ -2,6 +2,7 @@ package rss
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/mmcdole/gofeed"
@@ -10,12 +11,35 @@ import (
 
 // FetchArticles retrieves articles from the given feed URL.
 func FetchArticles(feedURL string) ([]*gofeed.Item, error) {
+	// Create a custom HTTP client with the User-Agent header
+	client := &http.Client{
+		Timeout: time.Second * 1, // Set a timeout for the request
+	}
+
+	// Create a new request
+	req, err := http.NewRequest("GET", feedURL, nil)
+	if err != nil {
+		utils.HandleError(err, "Error creating request", false)
+		return nil, err
+	}
+
+	// Set a valid, commonly accepted User-Agent header for Linux (Ubuntu/Firefox)
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0")
+
+	// Use the custom HTTP client to fetch the feed
+	resp, err := client.Do(req)
+	if err != nil {
+		utils.HandleError(err, "Error fetching feed", false)
+		return nil, err // Return early to avoid nil dereference
+	}
+	defer resp.Body.Close()
+
 	parser := gofeed.NewParser()
-	feed, err := parser.ParseURL(feedURL)
+	feed, err := parser.Parse(resp.Body)
 
 	// Handle error when fetching feed fails
 	if err != nil {
-		utils.HandleError(err, "Error fetching feed", false)
+		utils.HandleError(err, "Error parsing feed", false)
 		return nil, err // Return early to avoid nil dereference
 	}
 

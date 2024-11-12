@@ -49,6 +49,8 @@ func SendToTelegram(message string, proxyURL string, title string) {
 		{regexp.MustCompile(`(?i)Mobile|Android|iOS|iPhone|iPad|Phone|Tablet`), getEnv("MOBILE_THREAD_ID"), 4},
 		{regexp.MustCompile(`(?i)Portswigger`), getEnv("PORTSWIGGER_THREAD_ID"), 4},
 		{regexp.MustCompile(`(?i)Burp|Burp\s?suite|Burpsuite-Pro`), getEnv("BURPSUITE_THREAD_ID"), 4},
+		{regexp.MustCompile(`(?i)CTF|Capture\s?The\s?Flag`), getEnv("CTF_THREAD_ID"), 5},
+		{regexp.MustCompile(`(?i)hackerone|bugcrowd|yeswehack|intigriti`), getEnv("PLATFORMS_THREAD_ID"), 5},
 	}
 
 	// Sort keywords by priority (lower number means higher priority)
