@@ -48,9 +48,7 @@ https://medium.com/feed/tag/writeup
 https://medium.com/feed/tag/vulnhub
 https://medium.com/feed/tag/bug-hunter
 https://medium.com/feed/tag/bug-bounty
-https://medium.com/feed/tag/info-sec-writeups
 https://medium.com/feed/tag/hackthebox-writeup
-https://medium.com/feed/tag/javascript
 https://medium.com/feed/tag/xss-vulnerability
 https://medium.com/feed/tag/rce-vulnerability
 https://medium.com/feed/tag/sql-injection

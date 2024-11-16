@@ -41,15 +41,15 @@ func SendToTelegram(message string, proxyURL string, title string) {
 	}
 
 	keywords := []keywordPattern{
-		{regexp.MustCompile(`(?i)\$[0-9]*|\bMoney\b|bounty|bounties`), getEnv("MONEY_THREAD_ID"), 2},
+		{regexp.MustCompile(`(?i)\$[0-9]*|\bMoney\b|My\sFirst\sBug\sBounty|My\sFirst\sBounty|VDP`), getEnv("MONEY_THREAD_ID"), 2},
 		{regexp.MustCompile(`(?i)Bypass|waf|firewall(?:-bypass)?|waf-bypass`), getEnv("BYPASS_THREAD_ID"), 3},
 		{regexp.MustCompile(`(?i)Recon|reconnaissance|osint`), getEnv("RECON_THREAD_ID"), 4},
-		{regexp.MustCompile(`(?i)THM|TryHackMe`), getEnv("TRYHACKME_THREAD_ID"), 5},
-		{regexp.MustCompile(`(?i)HTB|HackTheBox`), getEnv("HACKTHEBOX_THREAD_ID"), 5},
+		{regexp.MustCompile(`(?i)THM|Try\s?Hack\s?Me`), getEnv("TRYHACKME_THREAD_ID"), 5},
+		{regexp.MustCompile(`(?i)HTB|Hack\s?The\s?Box`), getEnv("HACKTHEBOX_THREAD_ID"), 5},
 		{regexp.MustCompile(`(?i)Mobile|Android|iOS|iPhone|iPad|Phone|Tablet`), getEnv("MOBILE_THREAD_ID"), 5},
 		{regexp.MustCompile(`(?i)Portswigger`), getEnv("PORTSWIGGER_THREAD_ID"), 5},
 		{regexp.MustCompile(`(?i)Burp|Burp\s?suite|Burpsuite-Pro`), getEnv("BURPSUITE_THREAD_ID"), 5},
-		{regexp.MustCompile(`(?i)CTF|Capture\s?The\s?Flag`), getEnv("CTF_THREAD_ID"), 1},
+		{regexp.MustCompile(`(?i)CTFs?|Capture\s?The\s?Flag`), getEnv("CTF_THREAD_ID"), 5},
 		{regexp.MustCompile(`(?i)hackerone|bugcrowd|yeswehack|intigriti`), getEnv("PLATFORMS_THREAD_ID"), 6},
 	}
 
