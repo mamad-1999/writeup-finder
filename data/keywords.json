@@ -1,0 +1,114 @@
+{
+  "groups": [
+    {
+      "name": "general",
+      "keywords": [
+        {
+          "pattern": "\\$[0-9]*|\\bMoney\\b|My\\sFirst\\sBug\\sBounty|My\\sFirst\\sBounty|VDP",
+          "threadID": "MONEY_THREAD_ID",
+          "priority": 2
+        },
+        {
+          "pattern": "Bypass|waf|firewall(?:-bypass)?|waf-bypass",
+          "threadID": "BYPASS_THREAD_ID",
+          "priority": 6
+        },
+        {
+          "pattern": "Recon|reconnaissance|osint",
+          "threadID": "RECON_THREAD_ID",
+          "priority": 4
+        }
+      ]
+    },
+    {
+      "name": "platforms",
+      "keywords": [
+        {
+          "pattern": "hackerone|bugcrowd|yeswehack|intigriti",
+          "threadID": "PLATFORMS_THREAD_ID",
+          "priority": 6
+        }
+      ]
+    },
+    {
+      "name": "training",
+      "keywords": [
+        {
+          "pattern": "THM|Try\\s?Hack\\s?Me",
+          "threadID": "TRYHACKME_THREAD_ID",
+          "priority": 5
+        },
+        {
+          "pattern": "HTB|Hack\\s?The\\s?Box",
+          "threadID": "HACKTHEBOX_THREAD_ID",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "name": "technology",
+      "keywords": [
+        {
+          "pattern": "Linux|Unix|Windows|Mac\\s?Os",
+          "threadID": "OS_THREAD_ID",
+          "priority": 6
+        },
+        {
+          "pattern": "Mobile|Android|iOS|iPhone|iPad|Phone|Tablet",
+          "threadID": "MOBILE_THREAD_ID",
+          "priority": 5
+        }
+      ]
+    },
+    {
+      "name": "tools",
+      "keywords": [
+        {
+          "pattern": "Nessus|Metasploit|OWASP|ZAP|Wireshark|Nikto|SQLMap|Acunetix|FFUF|Wpscan|dirsearch|Nmap|X8|Kiterunner|Arjun|Gobuster|Brute\\s?force|John\\s?The\\s?Ripper|Hashcat|Netcat",
+          "threadID": "TOOLS_THREAD_ID",
+          "priority": 8
+        }
+      ]
+    },
+    {
+      "name": "vulnerabilities",
+      "keywords": [
+        {
+          "pattern": "SQL\\sInjection|Cross-Site\\sScripting|XSS|Command\\sInjection|Remote\\sCode\\sExecution|RCE|Buffer\\sOverflow|Denial\\sof\\sService|DoS|Path\\sTraversal|Local\\sFile\\sInclusion|LFI|Remote\\sFile\\sInclusion|RFI|Insecure\\sDirect\\sObject\\sReferences|IDOR|Security\\sMisconfiguration|Sensitive\\sData\\sExposure|Broken\\sAuthentication|Broken\\sAccess\\sControl|Cross-Site\\sRequest\\sForgery|CSRF|Clickjacking|XML\\sExternal\\sEntity|XXE|Insecure\\sDeserialization|Race\\sCondition|Privilege\\sEscalation|Insufficient\\sLogging\\sand\\sMonitoring|Server-Side\\sRequest\\sForgery|SSRF|Mass\\sAssignment|Open\\sRedirect|Directory\\sTraversal|Cross-Origin\\sResource\\sSharing\\sMisconfiguration|CORS|HTTP\\sResponse\\sSplitting|HTTP\\sHeader\\sInjection|Session\\sFixation|Credential\\sStuffing|XML\\sInjection|JSON\\sInjection|Code\\sInjection|Command\\sExecution|Information\\sDisclosure|Unvalidated\\sRedirects\\sand\\sForwards|Business\\sLogic\\sVulnerabilities",
+          "threadID": "VULNERABILITIES_THREAD_ID",
+          "priority": 7
+        }
+      ]
+    },
+    {
+      "name": "programming_languages",
+      "keywords": [
+        {
+          "pattern": "Go|Golang|Python|Ruby|Javascript|PHP|Rust|Typescript|Bash\\s?script|Shell\\s?Script|Lua|Dart|Java|NodeJs",
+          "threadID": "PROGRAMMINGLANGS_THREAD_ID",
+          "priority": 9
+        }
+      ]
+    },
+    {
+      "name": "other",
+      "keywords": [
+        {
+          "pattern": "Portswigger",
+          "threadID": "PORTSWIGGER_THREAD_ID",
+          "priority": 5
+        },
+        {
+          "pattern": "Burp|Burp\\s?suite|Burpsuite-Pro",
+          "threadID": "BURPSUITE_THREAD_ID",
+          "priority": 5
+        },
+        {
+          "pattern": "CTFs?|Capture\\s?The\\s?Flag",
+          "threadID": "CTF_THREAD_ID",
+          "priority": 5
+        }
+      ]
+    }
+  ]
+}

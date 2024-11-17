@@ -57,3 +57,11 @@ func PrintPretty(message string, colorAttr color.Attribute, isTitle bool) {
 		fmt.Println(color.CyanString(timestamp), "-", colored(message))
 	}
 }
+
+func GetEnv(key string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		HandleError(fmt.Errorf("environment variable %s not set", key), "Missing environment variable", false)
+	}
+	return value
+}

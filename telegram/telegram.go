@@ -7,9 +7,6 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	"os"
-	"regexp"
-	"sort"
 	"time"
 
 	"github.com/fatih/color"
@@ -29,45 +26,18 @@ const (
 )
 
 func SendToTelegram(message string, proxyURL string, title string) {
-	botToken := getEnv("TELEGRAM_BOT_TOKEN")
-	channelID := getEnv("CHAT_ID")
-	mainThreadID := getEnv("MAIN_THREAD_ID")
+	botToken := utils.GetEnv("TELEGRAM_BOT_TOKEN")
+	channelID := utils.GetEnv("CHAT_ID")
+	mainThreadID := utils.GetEnv("MAIN_THREAD_ID")
 
-	// Define keywords with priority levels and regex patterns
-	type keywordPattern struct {
-		pattern  *regexp.Regexp
-		threadID string
-		priority int
+	// Load keywords from the JSON configuration
+	keywords, err := utils.LoadKeywords("data/keywords.json")
+	if err != nil {
+		utils.HandleError(err, "Failed to load keyword patterns", true)
 	}
 
-	keywords := []keywordPattern{
-		{regexp.MustCompile(`(?i)\$[0-9]*|\bMoney\b|My\sFirst\sBug\sBounty|My\sFirst\sBounty|VDP`), getEnv("MONEY_THREAD_ID"), 2},
-		{regexp.MustCompile(`(?i)Bypass|waf|firewall(?:-bypass)?|waf-bypass`), getEnv("BYPASS_THREAD_ID"), 3},
-		{regexp.MustCompile(`(?i)Recon|reconnaissance|osint`), getEnv("RECON_THREAD_ID"), 4},
-		{regexp.MustCompile(`(?i)THM|Try\s?Hack\s?Me`), getEnv("TRYHACKME_THREAD_ID"), 5},
-		{regexp.MustCompile(`(?i)HTB|Hack\s?The\s?Box`), getEnv("HACKTHEBOX_THREAD_ID"), 5},
-		{regexp.MustCompile(`(?i)Mobile|Android|iOS|iPhone|iPad|Phone|Tablet`), getEnv("MOBILE_THREAD_ID"), 5},
-		{regexp.MustCompile(`(?i)Portswigger`), getEnv("PORTSWIGGER_THREAD_ID"), 5},
-		{regexp.MustCompile(`(?i)Burp|Burp\s?suite|Burpsuite-Pro`), getEnv("BURPSUITE_THREAD_ID"), 5},
-		{regexp.MustCompile(`(?i)CTFs?|Capture\s?The\s?Flag`), getEnv("CTF_THREAD_ID"), 5},
-		{regexp.MustCompile(`(?i)hackerone|bugcrowd|yeswehack|intigriti`), getEnv("PLATFORMS_THREAD_ID"), 6},
-	}
-
-	// Sort keywords by priority (lower number means higher priority)
-	sort.Slice(keywords, func(i, j int) bool {
-		return keywords[i].priority < keywords[j].priority
-	})
-
-	// Default to the main thread ID
-	messageThreadID := mainThreadID
-
-	// Find the first matching keyword in order of priority
-	for _, keyword := range keywords {
-		if keyword.pattern.MatchString(title) {
-			messageThreadID = keyword.threadID
-			break
-		}
-	}
+	// Determine the message thread ID
+	messageThreadID := utils.MatchKeyword(title, keywords, mainThreadID)
 
 	// Send the message
 	apiURL := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
@@ -122,14 +92,6 @@ func sendRequest(client *http.Client, apiURL string, jsonData []byte, retryCount
 	}
 
 	return fmt.Errorf("failed to send message, status code: %d", resp.StatusCode)
-}
-
-func getEnv(key string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		utils.HandleError(fmt.Errorf("environment variable %s not set", key), "Missing environment variable", false)
-	}
-	return value
 }
 
 func ValidateProxyURL(proxyURL string) error {
