@@ -5,6 +5,7 @@ https://medium.com/feed/tag/sqli
 https://medium.com/feed/tag/cross-site-scripting
 https://medium.com/feed/tag/rootme
 https://medium.com/feed/tag/burp
+https://medium.com/feed/tag/javascript
 https://medium.com/feed/tag/burp-suite
 https://medium.com/feed/tag/portswigger
 https://medium.com/feed/tag/broken-authentication

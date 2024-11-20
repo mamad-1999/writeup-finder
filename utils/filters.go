@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"regexp"
 	"sort"
@@ -24,7 +25,6 @@ type KeywordGroup struct {
 	Keywords []RawKeyword `json:"keywords"`
 }
 
-// LoadKeywords loads keyword patterns from a JSON file and resolves thread IDs
 func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 	// Prepopulate thread IDs from environment variables
 	threadIDMap := map[string]string{
@@ -34,6 +34,7 @@ func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 		"TRYHACKME_THREAD_ID":        GetEnv("TRYHACKME_THREAD_ID"),
 		"HACKTHEBOX_THREAD_ID":       GetEnv("HACKTHEBOX_THREAD_ID"),
 		"MOBILE_THREAD_ID":           GetEnv("MOBILE_THREAD_ID"),
+		"RECON_THREAD_ID":            GetEnv("RECON_THREAD_ID"),
 		"PORTSWIGGER_THREAD_ID":      GetEnv("PORTSWIGGER_THREAD_ID"),
 		"BURPSUITE_THREAD_ID":        GetEnv("BURPSUITE_THREAD_ID"),
 		"CTF_THREAD_ID":              GetEnv("CTF_THREAD_ID"),
@@ -50,22 +51,29 @@ func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 	}
 	defer file.Close()
 
-	var groups []KeywordGroup
-	if err := json.NewDecoder(file).Decode(&groups); err != nil {
+	var rawConfig struct {
+		Groups []KeywordGroup `json:"groups"`
+	}
+
+	if err := json.NewDecoder(file).Decode(&rawConfig); err != nil {
 		return nil, err
 	}
 
 	// Parse keywords and compile patterns
 	var keywords []KeywordPattern
-	for _, group := range groups {
+	for _, group := range rawConfig.Groups {
 		for _, raw := range group.Keywords {
 			compiledPattern, err := regexp.Compile(raw.Pattern)
 			if err != nil {
 				return nil, err // Return an error if regex compilation fails
 			}
+			threadID, ok := threadIDMap[raw.ThreadID]
+			if !ok {
+				return nil, fmt.Errorf("unknown thread ID: %s", raw.ThreadID)
+			}
 			keywords = append(keywords, KeywordPattern{
 				Pattern:  compiledPattern,
-				ThreadID: threadIDMap[raw.ThreadID],
+				ThreadID: threadID,
 				Priority: raw.Priority,
 			})
 		}
