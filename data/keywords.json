@@ -77,6 +77,11 @@
           "pattern": "SQL\\sInjection|Cross-Site\\sScripting|XSS|Command\\sInjection|Remote\\sCode\\sExecution|RCE|Buffer\\sOverflow|Denial\\sof\\sService|DoS|Path\\sTraversal|Local\\sFile\\sInclusion|LFI|Remote\\sFile\\sInclusion|RFI|Insecure\\sDirect\\sObject\\sReferences|IDOR|Security\\sMisconfiguration|Sensitive\\sData\\sExposure|Broken\\sAuthentication|Broken\\sAccess\\sControl|Cross-Site\\sRequest\\sForgery|CSRF|Clickjacking|XML\\sExternal\\sEntity|XXE|Insecure\\sDeserialization|Race\\sCondition|Privilege\\sEscalation|Insufficient\\sLogging\\sand\\sMonitoring|Server-Side\\sRequest\\sForgery|SSRF|Mass\\sAssignment|Open\\sRedirect|Directory\\sTraversal|Cross-Origin\\sResource\\sSharing\\sMisconfiguration|CORS|HTTP\\sResponse\\sSplitting|HTTP\\sHeader\\sInjection|Session\\sFixation|Credential\\sStuffing|XML\\sInjection|JSON\\sInjection|Code\\sInjection|Command\\sExecution|Information\\sDisclosure|Unvalidated\\sRedirects\\sand\\sForwards|Business\\sLogic\\sVulnerabilities",
           "threadID": "VULNERABILITIES_THREAD_ID",
           "priority": 7
+        },
+        {
+          "pattern": "CVE",
+          "threadID": "CVE_THREAD_ID",
+          "priority": 7
         }
       ]
     },
