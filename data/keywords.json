@@ -64,7 +64,7 @@
       "name": "tools",
       "keywords": [
         {
-          "pattern": "Nessus|Metasploit|OWASP|ZAP|Wireshark|Nikto|SQLMap|Acunetix|FFUF|Wpscan|dirsearch|Nmap|X8|Kiterunner|Arjun|Gobuster|Brute\\s?force|John\\s?The\\s?Ripper|Hashcat|Netcat",
+          "pattern": "Nessus|Metasploit|ZAP|Wireshark|Nikto|SQLMap|Acunetix|FFUF|Wpscan|dirsearch|Nmap|X8|Kiterunner|Arjun|Gobuster|Brute\\s?force|John\\s?The\\s?Ripper|Hashcat|Netcat|Browser\\s?Extensions?",
           "threadID": "TOOLS_THREAD_ID",
           "priority": 8
         }
@@ -89,7 +89,7 @@
       "name": "programming_languages",
       "keywords": [
         {
-          "pattern": "Go|Golang|Python|Ruby|Javascript|PHP|Rust|Typescript|Bash\\s?script|Shell\\s?Script|Lua|Dart|Java|NodeJs",
+          "pattern": "Go|Golang|Python|Ruby|Javascript|PHP|Rust|Typescript|Bash\\s?script|Shell\\s?Script|Lua|Dart|Java|NodeJs|Wordpress|Angular|Docker|React|Vue",
           "threadID": "PROGRAMMINGLANGS_THREAD_ID",
           "priority": 9
         }
