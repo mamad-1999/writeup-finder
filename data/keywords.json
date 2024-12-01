@@ -14,7 +14,7 @@
           "priority": 6
         },
         {
-          "pattern": "Recon|reconnaissance|osint",
+          "pattern": "Recon|reconnaissance",
           "threadID": "RECON_THREAD_ID",
           "priority": 4
         }
@@ -34,12 +34,12 @@
       "name": "training",
       "keywords": [
         {
-          "pattern": "THM|Try\\s?Hack\\s?Me",
+          "pattern": "THM|Try\\s?Hack\\s?Me|TRYHACKME|tryhackme",
           "threadID": "TRYHACKME_THREAD_ID",
           "priority": 5
         },
         {
-          "pattern": "HTB|Hack\\s?The\\s?Box",
+          "pattern": "HTB|Hack\\s?The\\s?Box|HACKTHEBOX|hackthebox",
           "threadID": "HACKTHEBOX_THREAD_ID",
           "priority": 5
         }
@@ -54,7 +54,7 @@
           "priority": 6
         },
         {
-          "pattern": "Mobile|Android|iOS|iPhone|iPad|Phone|Tablet",
+          "pattern": "Mobile|Android|iOS|iPhone|iPad|Phone|Tablet|Samsung",
           "threadID": "MOBILE_THREAD_ID",
           "priority": 5
         }
@@ -64,7 +64,7 @@
       "name": "tools",
       "keywords": [
         {
-          "pattern": "Nessus|Metasploit|ZAP|Wireshark|Nikto|SQLMap|Acunetix|FFUF|Wpscan|dirsearch|Nmap|X8|Kiterunner|Arjun|Gobuster|Brute\\s?force|John\\s?The\\s?Ripper|Hashcat|Netcat|Browser\\s?Extensions?",
+          "pattern": "Nessus|Metasploit|ZAP|Wireshark|Nikto|Hydra|dig|Curl|SQLMap|tlpmap|Acunetix|FFUF|Wpscan|dirsearch|Nmap|X8|Kiterunner|Arjun|Gobuster|Brute\\s?force|John\\s?The\\s?Ripper|Hashcat|Netcat|Browser\\s?Extensions?|wappalyzer|gospider|crawler|gau|nuclei|hash-identifier|katana|Linkfinder|unfurl|waybackurls|searchsploit|jwt_tool|cookiemonster|Shell|Bash|Zsh",
           "threadID": "TOOLS_THREAD_ID",
           "priority": 8
         }
@@ -74,12 +74,12 @@
       "name": "vulnerabilities",
       "keywords": [
         {
-          "pattern": "SQL\\sInjection|Cross-Site\\sScripting|XSS|Command\\sInjection|Remote\\sCode\\sExecution|RCE|Buffer\\sOverflow|Denial\\sof\\sService|DoS|Path\\sTraversal|Local\\sFile\\sInclusion|LFI|Remote\\sFile\\sInclusion|RFI|Insecure\\sDirect\\sObject\\sReferences|IDOR|Security\\sMisconfiguration|Sensitive\\sData\\sExposure|Broken\\sAuthentication|Broken\\sAccess\\sControl|Cross-Site\\sRequest\\sForgery|CSRF|Clickjacking|XML\\sExternal\\sEntity|XXE|Insecure\\sDeserialization|Race\\sCondition|Privilege\\sEscalation|Insufficient\\sLogging\\sand\\sMonitoring|Server-Side\\sRequest\\sForgery|SSRF|Mass\\sAssignment|Open\\sRedirect|Directory\\sTraversal|Cross-Origin\\sResource\\sSharing\\sMisconfiguration|CORS|HTTP\\sResponse\\sSplitting|HTTP\\sHeader\\sInjection|Session\\sFixation|Credential\\sStuffing|XML\\sInjection|JSON\\sInjection|Code\\sInjection|Command\\sExecution|Information\\sDisclosure|Unvalidated\\sRedirects\\sand\\sForwards|Business\\sLogic\\sVulnerabilities",
+          "pattern": "SQL\\sInjection|Cross-Site\\sScripting|XSS|Command\\sInjection|Remote\\sCode\\sExecution|RCE|Buffer\\sOverflow|Denial\\sof\\sService|DoS|Path\\sTraversal|Local\\sFile\\sInclusion|LFI|Remote\\sFile\\sInclusion|RFI|Insecure\\sDirect\\sObject\\sReferences|IDOR|Security\\sMisconfiguration|Sensitive\\sData\\sExposure|Broken\\sAuthentication|Broken\\sAccess\\sControl|Cross-Site\\sRequest\\sForgery|CSRF|Clickjacking|XML\\sExternal\\sEntity|XXE|Insecure\\sDeserialization|Race\\sCondition|Privilege\\sEscalation|Insufficient\\sLogging\\sand\\sMonitoring|Server-Side\\sRequest\\sForgery|SSRF|Mass\\sAssignment|Open\\sRedirect|Directory\\sTraversal|Cross-Origin\\sResource\\sSharing\\sMisconfiguration|CORS|HTTP\\sResponse\\sSplitting|HTTP\\sHeader\\sInjection|Session\\sFixation|Credential\\sStuffing|XML\\sInjection|JSON\\sInjection|Code\\sInjection|Command\\sExecution|Information\\sDisclosure|Unvalidated\\sRedirects\\sand\\sForwards|Business\\sLogic\\sVulnerabilities|Password\\sReset|Basic\\sAuthentication|AWS",
           "threadID": "VULNERABILITIES_THREAD_ID",
           "priority": 7
         },
         {
-          "pattern": "CVE",
+          "pattern": "CVE|exploit-db",
           "threadID": "CVE_THREAD_ID",
           "priority": 7
         }
@@ -89,7 +89,7 @@
       "name": "programming_languages",
       "keywords": [
         {
-          "pattern": "Go|Golang|Python|Ruby|Javascript|PHP|Rust|Typescript|Bash\\s?script|Shell\\s?Script|Lua|Dart|Java|NodeJs|Wordpress|Angular|Docker|React|Vue",
+          "pattern": "Go|Golang|Python|Ruby|Javascript|PHP|Rust|Typescript|Bash\\s?script|Shell\\s?Script|Lua|Dart|Java|NodeJs|Wordpress|Angular|Docker|React|Vue|Web-Server|Web\\sServer|Nginx|Apache|cms|Flask|Fastapi|django|Laravel",
           "threadID": "PROGRAMMINGLANGS_THREAD_ID",
           "priority": 9
         }
@@ -109,9 +109,14 @@
           "priority": 5
         },
         {
-          "pattern": "CTFs?|Capture\\s?The\\s?Flag",
+          "pattern": "CTFs|Capture\\s?The\\s?Flag|CTF|picoctf",
           "threadID": "CTF_THREAD_ID",
           "priority": 5
+        },
+        {
+          "pattern": "OSINT|Open-Source\\s?Intelligence|Open\\s?Source\\s?Intelligence",
+          "threadID": "OSINT_THREAD_ID",
+          "priority": 2
         }
       ]
     }
