@@ -4,17 +4,17 @@
       "name": "general",
       "keywords": [
         {
-          "pattern": "\\$[0-9]*|\\bMoney\\b|My\\sFirst\\sBug\\sBounty|My\\sFirst\\sBounty|VDP",
+          "pattern": "\\$[0-9]+|\\bMoney\\b|My\\sFirst\\sBug\\sBounty|My\\sFirst\\sBounty|\\bVDP\\b",
           "threadID": "MONEY_THREAD_ID",
           "priority": 2
         },
         {
-          "pattern": "Bypass|waf|firewall(?:-bypass)?|waf-bypass",
+          "pattern": "\\bBypass\\b|\\bWAF\\b|\\bfirewall(?:-bypass)?\\b|\\bwaf-bypass\\b",
           "threadID": "BYPASS_THREAD_ID",
           "priority": 6
         },
         {
-          "pattern": "Recon|reconnaissance",
+          "pattern": "\\bRecon\\b|\\bReconnaissance\\b",
           "threadID": "RECON_THREAD_ID",
           "priority": 4
         }
@@ -24,7 +24,7 @@
       "name": "platforms",
       "keywords": [
         {
-          "pattern": "hackerone|bugcrowd|yeswehack|intigriti",
+          "pattern": "\\bHackerOne\\b|\\bBugcrowd\\b|\\bYesWeHack\\b|\\bIntigriti\\b",
           "threadID": "PLATFORMS_THREAD_ID",
           "priority": 6
         }
@@ -34,12 +34,12 @@
       "name": "training",
       "keywords": [
         {
-          "pattern": "THM|Try\\s?Hack\\s?Me|TRYHACKME|tryhackme",
+          "pattern": "\\bTHM\\b|Try\\s?Hack\\s?Me|\\bTRYHACKME\\b|\\bTryHackMe\\b",
           "threadID": "TRYHACKME_THREAD_ID",
           "priority": 5
         },
         {
-          "pattern": "HTB|Hack\\s?The\\s?Box|HACKTHEBOX|hackthebox",
+          "pattern": "\\bHTB\\b|Hack\\s?The\\s?Box|\\bHACKTHEBOX\\b|\\bHackTheBox\\b",
           "threadID": "HACKTHEBOX_THREAD_ID",
           "priority": 5
         }
@@ -49,12 +49,12 @@
       "name": "technology",
       "keywords": [
         {
-          "pattern": "Linux|Unix|Windows|Mac\\s?Os",
+          "pattern": "\\bLinux\\b|\\bUnix\\b|\\bWindows\\b|\\bMac\\s?OS\\b|\\bGNU\\sLinux\\b",
           "threadID": "OS_THREAD_ID",
           "priority": 6
         },
         {
-          "pattern": "Mobile|Android|iOS|iPhone|iPad|Phone|Tablet|Samsung",
+          "pattern": "\\bMobile\\b|\\bAndroid\\b|\\biOS\\b|\\biPhone\\b|\\biPad\\b|\\bPhone\\b|\\bTablet\\b|\\bSamsung\\b",
           "threadID": "MOBILE_THREAD_ID",
           "priority": 5
         }
@@ -64,7 +64,7 @@
       "name": "tools",
       "keywords": [
         {
-          "pattern": "Nessus|Metasploit|ZAP|Wireshark|Nikto|Hydra|dig|Curl|SQLMap|tlpmap|Acunetix|FFUF|Wpscan|dirsearch|Nmap|X8|Kiterunner|Arjun|Gobuster|Brute\\s?force|John\\s?The\\s?Ripper|Hashcat|Netcat|Browser\\s?Extensions?|wappalyzer|gospider|crawler|gau|nuclei|hash-identifier|katana|Linkfinder|unfurl|waybackurls|searchsploit|jwt_tool|cookiemonster|Shell|Bash|Zsh",
+          "pattern": "\\bNessus\\b|\\bMetasploit\\b|\\bZAP\\b|\\bWireshark\\b|\\bNikto\\b|\\bHydra\\b|\\bdig\\b|\\bCurl\\b|\\bSQLMap\\b|\\btplmap\\b|\\bAcunetix\\b|\\bFFUF\\b|\\bWpscan\\b|\\bdirsearch\\b|\\bNmap\\b|\\bX8\\b|\\bKiterunner\\b|\\bArjun\\b|\\bGobuster\\b|\\bBrute\\s?Force\\b|\\bJohn\\s?The\\s?Ripper\\b|\\bHashcat\\b|\\bNetcat\\b|\\bBrowser\\s?Extensions?\\b|\\bWappalyzer\\b|\\bGospider\\b|\\bcrawler\\b|\\bgau\\b|\\bNuclei\\b|\\bhash-identifier\\b|\\bKatana\\b|\\bLinkfinder\\b|\\bUnfurl\\b|\\bwaybackurls\\b|\\bsearchsploit\\b|\\bjwt_tool\\b|\\bcookiemonster\\b|\\bShell\\b|\\bBash\\b|\\bZsh\\b|\\bBrowser\\b",
           "threadID": "TOOLS_THREAD_ID",
           "priority": 8
         }
@@ -74,12 +74,12 @@
       "name": "vulnerabilities",
       "keywords": [
         {
-          "pattern": "SQL\\sInjection|Cross-Site\\sScripting|XSS|Command\\sInjection|Remote\\sCode\\sExecution|RCE|Buffer\\sOverflow|Denial\\sof\\sService|DoS|Path\\sTraversal|Local\\sFile\\sInclusion|LFI|Remote\\sFile\\sInclusion|RFI|Insecure\\sDirect\\sObject\\sReferences|IDOR|Security\\sMisconfiguration|Sensitive\\sData\\sExposure|Broken\\sAuthentication|Broken\\sAccess\\sControl|Cross-Site\\sRequest\\sForgery|CSRF|Clickjacking|XML\\sExternal\\sEntity|XXE|Insecure\\sDeserialization|Race\\sCondition|Privilege\\sEscalation|Insufficient\\sLogging\\sand\\sMonitoring|Server-Side\\sRequest\\sForgery|SSRF|Mass\\sAssignment|Open\\sRedirect|Directory\\sTraversal|Cross-Origin\\sResource\\sSharing\\sMisconfiguration|CORS|HTTP\\sResponse\\sSplitting|HTTP\\sHeader\\sInjection|Session\\sFixation|Credential\\sStuffing|XML\\sInjection|JSON\\sInjection|Code\\sInjection|Command\\sExecution|Information\\sDisclosure|Unvalidated\\sRedirects\\sand\\sForwards|Business\\sLogic\\sVulnerabilities|Password\\sReset|Basic\\sAuthentication|AWS",
+          "pattern": "\\bSQL\\sInjection\\b|\\bCross-Site\\sScripting\\b|\\bXSS\\b|\\bCommand\\sInjection\\b|\\bRemote\\sCode\\sExecution\\b|\\bRCE\\b|\\bBuffer\\sOverflow\\b|\\bDenial\\sof\\sService\\b|\\bDoS\\b|\\bPath\\sTraversal\\b|\\bLocal\\sFile\\sInclusion\\b|\\bLFI\\b|\\bRemote\\sFile\\sInclusion\\b|\\bRFI\\b|\\bInsecure\\sDirect\\sObject\\sReferences\\b|\\bIDOR\\b|\\bSecurity\\sMisconfiguration\\b|\\bSensitive\\sData\\sExposure\\b|\\bBroken\\sAuthentication\\b|\\bBroken\\sAccess\\sControl\\b|\\bCross-Site\\sRequest\\sForgery\\b|\\bCSRF\\b|\\bClickjacking\\b|\\bXML\\sExternal\\sEntity\\b|\\bXXE\\b|\\bInsecure\\sDeserialization\\b|\\bRace\\sCondition\\b|\\bPrivilege\\sEscalation\\b|\\bInsufficient\\sLogging\\sand\\sMonitoring\\b|\\bServer-Side\\sRequest\\sForgery\\b|\\bSSRF\\b|\\bMass\\sAssignment\\b|\\bOpen\\sRedirect\\b|\\bDirectory\\sTraversal\\b|\\bCross-Origin\\sResource\\sSharing\\sMisconfiguration\\b|\\bCORS\\b|\\bHTTP\\sResponse\\sSplitting\\b|\\bHTTP\\sHeader\\sInjection\\b|\\bSession\\sFixation\\b|\\bCredential\\sStuffing\\b|\\bXML\\sInjection\\b|\\bJSON\\sInjection\\b|\\bCode\\sInjection\\b|\\bCommand\\sExecution\\b|\\bInformation\\sDisclosure\\b|\\bUnvalidated\\sRedirects\\sand\\sForwards\\b|\\bBusiness\\sLogic\\sVulnerabilities\\b|\\bPassword\\sReset\\b|\\bBasic\\sAuthentication\\b",
           "threadID": "VULNERABILITIES_THREAD_ID",
           "priority": 7
         },
         {
-          "pattern": "CVE|exploit-db",
+          "pattern": "\\bCVE\\b|\\bexploit-db\\b",
           "threadID": "CVE_THREAD_ID",
           "priority": 7
         }
@@ -89,7 +89,7 @@
       "name": "programming_languages",
       "keywords": [
         {
-          "pattern": "Go|Golang|Python|Ruby|Javascript|PHP|Rust|Typescript|Bash\\s?script|Shell\\s?Script|Lua|Dart|Java|NodeJs|Wordpress|Angular|Docker|React|Vue|Web-Server|Web\\sServer|Nginx|Apache|cms|Flask|Fastapi|django|Laravel",
+          "pattern": "\\bGo\\b|\\bGolang\\b|\\bPython\\b|\\bRuby\\b|\\bJavascript\\b|\\bPHP\\b|\\bRust\\b|\\bTypescript\\b|\\bBash\\s?script\\b|\\bShell\\s?Script\\b|\\bLua\\b|\\bDart\\b|\\bJava\\b|\\bNodeJs\\b|\\bWordpress\\b|\\bAngular\\b|\\bDocker\\b|\\bReact\\b|\\bVue\\b|\\bWeb-Server\\b|\\bWeb\\sServer\\b|\\bNginx\\b|\\bApache\\b|\\bCMS\\b|\\bFlask\\b|\\bFastapi\\b|\\bdjango\\b|\\bLaravel\\b",
           "threadID": "PROGRAMMINGLANGS_THREAD_ID",
           "priority": 9
         }
@@ -99,22 +99,22 @@
       "name": "other",
       "keywords": [
         {
-          "pattern": "Portswigger",
+          "pattern": "\\bPortswigger\\b",
           "threadID": "PORTSWIGGER_THREAD_ID",
           "priority": 5
         },
         {
-          "pattern": "Burp|Burp\\s?suite|Burpsuite-Pro",
+          "pattern": "\\bBurp\\b|\\bBurp\\s?Suite\\b|\\bBurpsuite-Pro\\b",
           "threadID": "BURPSUITE_THREAD_ID",
           "priority": 5
         },
         {
-          "pattern": "CTFs|Capture\\s?The\\s?Flag|CTF|picoctf",
+          "pattern": "\\bCTFs\\b|\\bCapture\\s?The\\s?Flag\\b|\\bCTF\\b|\\bpicoctf\\b",
           "threadID": "CTF_THREAD_ID",
-          "priority": 5
+          "priority": 6
         },
         {
-          "pattern": "OSINT|Open-Source\\s?Intelligence|Open\\s?Source\\s?Intelligence",
+          "pattern": "\\bOSINT\\b|\\bOpen-Source\\s?Intelligence\\b|\\bOpen\\s?Source\\s?Intelligence\\b",
           "threadID": "OSINT_THREAD_ID",
           "priority": 2
         }
