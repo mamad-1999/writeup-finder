@@ -1,4 +1,3 @@
-https://medium.com/feed/tag/xss
 https://medium.com/feed/tag/owasp-top-10
 https://medium.com/feed/tag/ssrf
 https://medium.com/feed/tag/sqli
@@ -36,10 +35,17 @@ https://medium.com/feed/tag/bug-hunting
 https://medium.com/feed/tag/web-security
 https://medium.com/feed/tag/application-security
 https://medium.com/feed/tag/penetration-testing
+https://medium.com/feed/tag/security-tools
 https://medium.com/feed/tag/vulnerability
 https://medium.com/feed/tag/recon
 https://medium.com/feed/tag/tryhackme
+https://medium.com/feed/tag/picoctf
 https://medium.com/feed/tag/hackerone
+https://medium.com/feed/tag/intigriti
+https://medium.com/feed/tag/osint
+https://medium.com/feed/tag/cve
+https://medium.com/feed/tag/bugcrowd
+https://medium.com/feed/tag/yeswehack
 https://medium.com/feed/tag/api-security
 https://medium.com/feed/tag/appsec
 https://medium.com/feed/tag/web-application-security

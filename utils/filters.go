@@ -65,7 +65,7 @@ func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 	var keywords []KeywordPattern
 	for _, group := range rawConfig.Groups {
 		for _, raw := range group.Keywords {
-			compiledPattern, err := regexp.Compile(raw.Pattern)
+			compiledPattern, err := regexp.Compile("(?i)" + raw.Pattern)
 			if err != nil {
 				return nil, err // Return an error if regex compilation fails
 			}

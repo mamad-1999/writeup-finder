@@ -34,7 +34,7 @@
       "name": "training",
       "keywords": [
         {
-          "pattern": "\\bTHM\\b|Try\\s?Hack\\s?Me|\\bTRYHACKME\\b|\\bTryHackMe\\b",
+          "pattern": "\\bTHM\\b|Try\\s?Hack\\s?Me|\\bTRYHACKME\\b|\\bTryHackMe\\b|\\bTryHackme’s\\b",
           "threadID": "TRYHACKME_THREAD_ID",
           "priority": 5
         },

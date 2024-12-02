@@ -13,7 +13,7 @@ import (
 func FetchArticles(feedURL string) ([]*gofeed.Item, error) {
 	// Create a custom HTTP client with the User-Agent header
 	client := &http.Client{
-		Timeout: time.Second * 1, // Set a timeout for the request
+		Timeout: time.Second * 10, // Set a timeout for the request
 	}
 
 	// Create a new request
@@ -25,6 +25,7 @@ func FetchArticles(feedURL string) ([]*gofeed.Item, error) {
 
 	// Set a valid, commonly accepted User-Agent header for Linux (Ubuntu/Firefox)
 	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0")
+	req.Header.Set("Accept", "application/rss+xml, application/xml;q=0.9, */*;q=0.8")
 
 	// Use the custom HTTP client to fetch the feed
 	resp, err := client.Do(req)
@@ -36,6 +37,10 @@ func FetchArticles(feedURL string) ([]*gofeed.Item, error) {
 
 	parser := gofeed.NewParser()
 	feed, err := parser.Parse(resp.Body)
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return nil, fmt.Errorf("HTTP error: %s, status code: %d", resp.Status, resp.StatusCode)
+	}
 
 	// Handle error when fetching feed fails
 	if err != nil {
