@@ -74,7 +74,7 @@
       "name": "vulnerabilities",
       "keywords": [
         {
-          "pattern": "\\bSQL\\sInjection\\b|\\bCross-Site\\sScripting\\b|\\bXSS\\b|\\bCommand\\sInjection\\b|\\bRemote\\sCode\\sExecution\\b|\\bRCE\\b|\\bBuffer\\sOverflow\\b|\\bDenial\\sof\\sService\\b|\\bDoS\\b|\\bPath\\sTraversal\\b|\\bLocal\\sFile\\sInclusion\\b|\\bLFI\\b|\\bRemote\\sFile\\sInclusion\\b|\\bRFI\\b|\\bInsecure\\sDirect\\sObject\\sReferences\\b|\\bIDOR\\b|\\bSecurity\\sMisconfiguration\\b|\\bSensitive\\sData\\sExposure\\b|\\bBroken\\sAuthentication\\b|\\bBroken\\sAccess\\sControl\\b|\\bCross-Site\\sRequest\\sForgery\\b|\\bCSRF\\b|\\bClickjacking\\b|\\bXML\\sExternal\\sEntity\\b|\\bXXE\\b|\\bInsecure\\sDeserialization\\b|\\bRace\\sCondition\\b|\\bPrivilege\\sEscalation\\b|\\bInsufficient\\sLogging\\sand\\sMonitoring\\b|\\bServer-Side\\sRequest\\sForgery\\b|\\bSSRF\\b|\\bMass\\sAssignment\\b|\\bOpen\\sRedirect\\b|\\bDirectory\\sTraversal\\b|\\bCross-Origin\\sResource\\sSharing\\sMisconfiguration\\b|\\bCORS\\b|\\bHTTP\\sResponse\\sSplitting\\b|\\bHTTP\\sHeader\\sInjection\\b|\\bSession\\sFixation\\b|\\bCredential\\sStuffing\\b|\\bXML\\sInjection\\b|\\bJSON\\sInjection\\b|\\bCode\\sInjection\\b|\\bCommand\\sExecution\\b|\\bInformation\\sDisclosure\\b|\\bUnvalidated\\sRedirects\\sand\\sForwards\\b|\\bBusiness\\sLogic\\sVulnerabilities\\b|\\bPassword\\sReset\\b|\\bBasic\\sAuthentication\\b|\\bPassword\\sVulnerability\\b|\\bOauth\\sMisconfiguration\\b",
+          "pattern": "\\bSQL\\sInjection\\b|\\bCross(-|\\s)Site\\sScripting\\b|\\bXSS\\b|\\bCommand\\sInjection\\b|\\bRemote\\sCode\\sExecution\\b|\\bRCE\\b|\\bBuffer\\sOverflow\\b|\\bDenial\\sof\\sService\\b|\\bDoS\\b|\\bPath\\sTraversal\\b|\\bLocal\\sFile\\sInclusion\\b|\\bLFI\\b|\\bRemote\\sFile\\sInclusion\\b|\\bRFI\\b|\\bInsecure\\sDirect\\sObject\\sReferences\\b|\\bIDOR\\b|\\bSecurity\\sMisconfiguration\\b|\\bSensitive\\sData\\sExposure\\b|\\bBroken\\sAuthentication\\b|\\bBroken\\sAccess\\sControl\\b|\\bCross(-|\\s)Site\\sRequest\\sForgery\\b|\\bCSRF\\b|\\bClickjacking\\b|\\bXML\\sExternal\\sEntity\\b|\\bXXE\\b|\\bInsecure\\sDeserialization\\b|\\bRace\\sCondition\\b|\\bPrivilege\\sEscalation\\b|\\bInsufficient\\sLogging\\sand\\sMonitoring\\b|\\bServer-Side\\sRequest\\sForgery\\b|\\bSSRF\\b|\\bMass\\sAssignment\\b|\\bOpen\\sRedirect\\b|\\bDirectory\\sTraversal\\b|\\bCross-Origin\\sResource\\sSharing\\sMisconfiguration\\b|\\bCORS\\b|\\bHTTP\\sResponse\\sSplitting\\b|\\bHTTP\\sHeader\\sInjection\\b|\\bSession\\sFixation\\b|\\bCredential\\sStuffing\\b|\\bXML\\sInjection\\b|\\bJSON\\sInjection\\b|\\bCode\\sInjection\\b|\\bCommand\\sExecution\\b|\\bInformation\\sDisclosure\\b|\\bUnvalidated\\sRedirects\\sand\\sForwards\\b|\\bBusiness\\sLogic\\sVulnerabilities\\b|\\bPassword\\sReset\\b|\\bBasic\\sAuthentication\\b|\\bPassword\\sVulnerability\\b|\\bOauth\\sMisconfiguration\\b|\\b(web)?\\s?cache(\\s|-)(deception|Poisoning)\\b|\\b(HTTP\\s)?(Request\\s)?Smuggling\\b|\\b(weak\\s)?default(\\s|-)credentials\\b|\\bOpen\\sRedirect\\b|\\bNOSQL\\sinjection\\b",
           "threadID": "VULNERABILITIES_THREAD_ID",
           "priority": 7
         },
@@ -114,7 +114,7 @@
           "priority": 6
         },
         {
-          "pattern": "\\bOSINT\\b|\\bOpen-Source\\s?Intelligence\\b|\\bOpen\\s?Source\\s?Intelligence\\b",
+          "pattern": "\\bOSINT\\b|\\bOpen-Source\\s?Intelligence\\b|\\bOpen\\s?Source\\s?Intelligence\\b|\\bOsint4fun\\b",
           "threadID": "OSINT_THREAD_ID",
           "priority": 2
         }
