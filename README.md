@@ -14,14 +14,35 @@
 
 "Join our Writeup Hacking supergroup for curated hacking writeups and resources! 📜🔍 https://t.me/writeup_hacking"
 
-Writeup Finder is a tool designed to automatically find and save recent writeups from specified URLs. It supports saving the found writeups in a PostgreSQL database, and sending them directly to a Telegram channel Or group.
+Writeup Finder is a tool designed to automatically find and save recent writeups from specified URLs. It supports saving the found writeups in a PostgreSQL database, and sending them directly to a Telegram.
+
+```
+Writeup-finder is a tool to search for writeups and manage article data, including sending notifications.
+
+Usage:
+  writeup-finder [flags]
+  writeup-finder [command]
+
+Available Commands:
+  completion  Generate autocompletion script
+  help        Help about any command
+
+Flags:
+      --database       Save new articles in the database
+      --help           Show help
+      --proxy string   Proxy URL to use for sending Telegram messages
+      --telegram       Send new articles to Telegram
+
+Use "writeup-finder [command] --help" for more information about a command.
+
+```
 
 ## Features
 
 - Fetch recent writeups from multiple URLs.
 - Save writeups to a PostgreSQL database.
-- Optionally send notifications of new writeups to a Telegram channel.
-- Configurable through flags for different output methods.
+- Optionally send notifications of new writeups to a Telegram.
+- It filters topics based on the title and sends them to the corresponding topic in the Telegram group.
 
 ```
 # Directory structure of WriteUp-finder
@@ -62,39 +83,31 @@ Writeup Finder is a tool designed to automatically find and save recent writeups
 
 - Go 1.16+
 - PostgreSQL
-- A Telegram bot (for sending notifications)
 
 ## Setup
 
 1. Clone the repository.
 2. Install dependencies using `go mod tidy`.
-3. Create a `.env` file with the following variables:
-
-   ```bash
-   # Database Configuration
-   DB_USER=<your_db_user>             # Your database username
-   DB_PASSWORD=<your_db_password>     # Your database password
-   DB_HOST=<your_db_host>             # The hostname of your database server
-   DB_PORT=<your_db_port>             # The port number for your database connection
-   DB_NAME=<your_db_name>             # The name of your database
-
-   # Telegram Configuration
-   TELEGRAM_BOT_TOKEN=<your_telegram_bot_token>      # Your Telegram bot's token
-   TELEGRAM_CHANNEL_ID=<your_telegram_channel_id>    # The ID of your Telegram channel
-   CHAT_ID=<CHAT_ID>                                 # The ID of the chat group
-   MESSAGE_THREAD_ID=<MESSAGE_THREAD_ID>             # The ID of the message thread (for supergroups with topics)
-   ```
-
+3. Create a `.env` file with the `.env.example` file.
 4. Update the `url.txt` file with the URLs you want to monitor.
 5. Run the tool with the desired flags.
+6. Run `go build -o writeup-finder`
 
 ## Usage
 
-| Command                                                   | Description                         |
-| --------------------------------------------------------- | ----------------------------------- |
-| `go run main.go -d`                                       | Save to PostgreSQL database         |
-| `go run main.go [-d] -t`                                  | Send new writeups to Telegram       |
-| `go run main.go [-d] -t --proxy=PROTOCOL://HOSTNAME:PORT` | Send to Telegram with proxy support |
+| Command                                                                   | Description                                      |
+| ------------------------------------------------------------------------- | ------------------------------------------------ |
+| `writeup-finder --database`                                               | Save new articles to PostgreSQL database         |
+| `writeup-finder [--database] --telegram`                                  | Send new writeups to Telegram                    |
+| `writeup-finder [--database] --telegram --proxy=PROTOCOL://HOSTNAME:PORT` | Send new writeups to Telegram with proxy support |
+
+## Flags:
+- `--database`       Save new articles in the database
+- `--help`           Show help
+- `--proxy string`   Proxy URL to use for sending Telegram messages
+- `--telegram`       Send new articles to Telegram
+
+Use `writeup-finder [command] --help` for more information about a command.
 
 You can use `CRON` to run script every *hours, *days, or etc.
 
@@ -103,5 +116,5 @@ You can use `CRON` to run script every *hours, *days, or etc.
 More read: [How to Automate Tasks with cron Jobs in Linux](https://www.freecodecamp.org/news/cron-jobs-in-linux/)
 
 ```bash
-    0 */3 * * * cd /path/to/your/script && /usr/local/go/bin/go run /path/to/your/project/main.go -d -t
+    0 */3 * * * cd /path/to/your/script && /usr/local/go/bin/writeup-finder -d -t
 ```
