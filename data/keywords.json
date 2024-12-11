@@ -64,7 +64,7 @@
       "name": "tools",
       "keywords": [
         {
-          "pattern": "\\bNessus\\b|\\bMetasploit\\b|\\bZAP\\b|\\bWireshark\\b|\\bNikto\\b|\\bHydra\\b|\\bdig\\b|\\bCurl\\b|\\bSQLMap\\b|\\btplmap\\b|\\bAcunetix\\b|\\bFFUF\\b|\\bWpscan\\b|\\bdirsearch\\b|\\bNmap\\b|\\bX8\\b|\\bKiterunner\\b|\\bArjun\\b|\\bGobuster\\b|\\bBrute\\s?Force\\b|\\bJohn\\s?The\\s?Ripper\\b|\\bHashcat\\b|\\bNetcat\\b|\\bBrowser\\s?Extensions?\\b|\\bWappalyzer\\b|\\bGospider\\b|\\bcrawler\\b|\\bgau\\b|\\bNuclei\\b|\\bhash-identifier\\b|\\bKatana\\b|\\bLinkfinder\\b|\\bUnfurl\\b|\\bwaybackurls\\b|\\bsearchsploit\\b|\\bjwt_tool\\b|\\bcookiemonster\\b|\\bShell\\b|\\bBash\\b|\\bZsh\\b|\\bBrowser\\b|\\bShodan\\b|\\bHandbook\\b|\\bGoogle\\sDorking\\b|\\bCyberchef\\b|\\bChatGPT\\b|",
+          "pattern": "\\bNessus\\b|\\bMetasploit\\b|\\bZAP\\b|\\bWireshark\\b|\\bNikto\\b|\\bHydra\\b|\\bdig\\b|\\bCurl\\b|\\bSQLMap\\b|\\btplmap\\b|\\bAcunetix\\b|\\bFFUF\\b|\\bWpscan\\b|\\bdirsearch\\b|\\bNmap\\b|\\bX8\\b|\\bKiterunner\\b|\\bArjun\\b|\\bGobuster\\b|\\bBrute\\s?Force\\b|\\bJohn\\s?The\\s?Ripper\\b|\\bHashcat\\b|\\bNetcat\\b|\\bBrowser\\s?Extensions?\\b|\\bWappalyzer\\b|\\bGospider\\b|\\bcrawler\\b|\\bgau\\b|\\bNuclei\\b|\\bhash-identifier\\b|\\bKatana\\b|\\bLinkfinder\\b|\\bUnfurl\\b|\\bwaybackurls\\b|\\bsearchsploit\\b|\\bjwt_tool\\b|\\bcookiemonster\\b|\\bShell\\b|\\bBash\\b|\\bZsh\\b|\\bBrowser\\b|\\bShodan\\b|\\bHandbook\\b|\\bGoogle\\sDorking\\b|\\bCyberchef\\b|\\bChatGPT\\b",
           "threadID": "TOOLS_THREAD_ID",
           "priority": 8
         }
