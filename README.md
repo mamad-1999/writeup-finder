@@ -24,26 +24,38 @@ Writeup Finder is a tool designed to automatically find and save recent writeups
 - Configurable through flags for different output methods.
 
 ```
-├── .env
-├── .gitignore
-├── README.md
-├── config/
-│   ├── env.go
-├── data/
-│   ├── url.txt
-├── db/
-│   ├── db.go
-├── directory_structure.md
-├── go.mod
-├── go.sum
-├── main.go
-├── rss/
-│   ├── fetch.go
-├── telegram/
-│   ├── telegram.go
-├── utils/
-    ├── http.go
-    ├── utils.go
+# Directory structure of WriteUp-finder
+
+├── .env 
+├── .env.example 
+├── .gitignore 
+├── README.md 
+├── command/ 
+│   └── command.go 
+├── config/ 
+│   └── env.go 
+├── data/ 
+│   ├── keywords.json 
+│   └── url.txt 
+├── db/ 
+│   └── db.go 
+├── global/ 
+│   └── global.go 
+├── go.mod 
+├── go.sum 
+├── main.go 
+├── rss/ 
+│   └── fetch.go 
+├── run_writeUp-finder.sh 
+├── telegram/ 
+│   └── telegram.go 
+├── url/ 
+│   └── url.go 
+├── utils/ 
+│   ├── filters.go 
+│   ├── http.go 
+│   └── utils.go 
+└── writeup-finder 
 ```
 
 ## Requirements
