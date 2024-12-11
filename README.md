@@ -12,9 +12,9 @@
     </a>
 </p>
 
-"Join our Writeup Hacking supergroup for curated hacking writeups and resources!
+Join our Writeup Hacking supergroup for curated hacking writeups and resources!
 
-📜🔍 https://t.me/writeup_hacking"
+📜🔍 https://t.me/writeup_hacking
 
 Writeup Finder is a tool designed to automatically find and save recent writeups from specified URLs. It supports saving the found writeups in a PostgreSQL database, and sending them directly to a Telegram.
 
