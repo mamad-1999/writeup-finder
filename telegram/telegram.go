@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -60,12 +61,14 @@ func SendToTelegram(message string, proxyURL string, title string) {
 		err := sendRequest(client, apiURL, jsonData, &retryCount)
 		if err != nil {
 			if retryCount >= maxRetries {
-				utils.HandleError(err, "Failed to send message to Telegram after retries", false)
+				log.Printf("Failed to send message to Telegram after %d retries: %v", maxRetries, err)
 				return
 			}
+			log.Printf("Retrying request (%d/%d): %v", retryCount, maxRetries, err)
 			time.Sleep(retryDelay) // Wait before retrying
 			continue
 		}
+		log.Println("Message sent successfully!")
 		break // Exit the loop if request was successful
 	}
 }
@@ -79,7 +82,8 @@ func sendRequest(client *http.Client, apiURL string, jsonData []byte, retryCount
 			(*retryCount)++
 			return err // Return the error to trigger a retry
 		}
-		return err // Return the error for non-retryable errors
+		(*retryCount)++
+		return err // Increment retry count for non-retryable errors
 	}
 	defer resp.Body.Close()
 
@@ -87,6 +91,7 @@ func sendRequest(client *http.Client, apiURL string, jsonData []byte, retryCount
 		return nil // Success, no need to retry
 	}
 
+	// Handle rate limiting
 	if resp.StatusCode == http.StatusTooManyRequests {
 		retryAfter := time.Duration(rateLimitBase<<*retryCount) * time.Second
 		fmt.Println(color.YellowString("Rate limit exceeded, retrying after %v...", retryAfter))
@@ -95,6 +100,9 @@ func sendRequest(client *http.Client, apiURL string, jsonData []byte, retryCount
 		return fmt.Errorf("rate limit exceeded")
 	}
 
+	// Log unexpected HTTP status codes
+	log.Printf("Unexpected status code %d: retrying...", resp.StatusCode)
+	(*retryCount)++
 	return fmt.Errorf("failed to send message, status code: %d", resp.StatusCode)
 }
 
