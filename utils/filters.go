@@ -48,6 +48,7 @@ func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 
 	// Load JSON config
 	file, err := os.Open(configPath)
+	fmt.Println(file, "This is the log of keyword path...")
 	if err != nil {
 		return nil, err
 	}

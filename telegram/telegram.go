@@ -29,6 +29,8 @@ func SendToTelegram(message string, proxyURL string, title string) {
 	botToken := utils.GetEnv("TELEGRAM_BOT_TOKEN")
 	channelID := utils.GetEnv("CHAT_ID")
 	mainThreadID := utils.GetEnv("MAIN_THREAD_ID")
+	fmt.Println("This log is in SendToTelegram...")
+	fmt.Println(botToken)
 
 	// Load keywords from the JSON configuration
 	keywords, err := utils.LoadKeywords("data/keywords.json")
