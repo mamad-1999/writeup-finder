@@ -17,7 +17,7 @@ check_proxy() {
 
 # Function to check if Windscribe VPN is up
 check_windscribe() {
-    ps aux | grep "[w]indscribe" >/dev/null 2>&1
+    pgrep -l windscribe >/dev/null 2>&1
     if [ $? -eq 0 ]; then
         return 0
     else

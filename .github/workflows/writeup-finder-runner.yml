@@ -1,0 +1,60 @@
+name: Run Writeup Finder with Supabase
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 */2 * * *" # Runs every 2 hours
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  writeup-finder:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.21
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      # Step 4: Create .env file in the repository root
+      - name: Create .env file
+        run: |
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> $GITHUB_WORKSPACE/.env
+          echo "TELEGRAM_CHANNEL_ID=${{ secrets.TELEGRAM_CHANNEL_ID }}" >> $GITHUB_WORKSPACE/.env
+          echo "CHAT_ID=${{ secrets.CHAT_ID }}" >> $GITHUB_WORKSPACE/.env
+          echo "MAIN_THREAD_ID=2" >> $GITHUB_WORKSPACE/.env
+          echo "PLATFORMS_THREAD_ID=3" >> $GITHUB_WORKSPACE/.env
+          echo "TRYHACKME_THREAD_ID=4326" >> $GITHUB_WORKSPACE/.env
+          echo "HACKTHEBOX_THREAD_ID=4327" >> $GITHUB_WORKSPACE/.env
+          echo "MOBILE_THREAD_ID=4328" >> $GITHUB_WORKSPACE/.env
+          echo "MONEY_THREAD_ID=4329" >> $GITHUB_WORKSPACE/.env
+          echo "RECON_THREAD_ID=4330" >> $GITHUB_WORKSPACE/.env
+          echo "BYPASS_THREAD_ID=4331" >> $GITHUB_WORKSPACE/.env
+          echo "PORTSWIGGER_THREAD_ID=4332" >> $GITHUB_WORKSPACE/.env
+          echo "BURPSUITE_THREAD_ID=4333" >> $GITHUB_WORKSPACE/.env
+          echo "CTF_THREAD_ID=4488" >> $GITHUB_WORKSPACE/.env
+          echo "OS_THREAD_ID=4863" >> $GITHUB_WORKSPACE/.env
+          echo "VULNERABILITIES_THREAD_ID=4861" >> $GITHUB_WORKSPACE/.env
+          echo "TOOLS_THREAD_ID=4865" >> $GITHUB_WORKSPACE/.env
+          echo "PROGRAMMINGLANGS_THREAD_ID=4867" >> $GITHUB_WORKSPACE/.env
+          echo "CVE_THREAD_ID=5189" >> $GITHUB_WORKSPACE/.env
+          echo "OSINT_THREAD_ID=5782" >> $GITHUB_WORKSPACE/.env
+          echo "DB_HOST=${{ secrets.SUPABASE_DB_HOST }}" >> $GITHUB_WORKSPACE/.env
+          echo "DB_PORT=5432" >> $GITHUB_WORKSPACE/.env
+          echo "DB_NAME=${{ secrets.SUPABASE_DB_NAME }}" >> $GITHUB_WORKSPACE/.env
+          echo "DB_USER=${{ secrets.SUPABASE_DB_USER }}" >> $GITHUB_WORKSPACE/.env
+          echo "DB_PASSWORD=${{ secrets.SUPABASE_DB_PASSWORD }}" >> $GITHUB_WORKSPACE/.env
+
+      - name: Run Writeup Finder
+        run: go run main.go --database --telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
