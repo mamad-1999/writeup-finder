@@ -30,10 +30,11 @@ func SendToTelegram(message string, proxyURL string, title string) {
 	channelID := utils.GetEnv("CHAT_ID")
 	mainThreadID := utils.GetEnv("MAIN_THREAD_ID")
 	fmt.Println("This log is in SendToTelegram...")
-	fmt.Println(botToken)
+	fmt.Println(botToken, "Bot Token")
 
 	// Load keywords from the JSON configuration
 	keywords, err := utils.LoadKeywords("data/keywords.json")
+	fmt.Println(keywords, "This is the keyword Load")
 	if err != nil {
 		utils.HandleError(err, "Failed to load keyword patterns", true)
 	}
@@ -70,6 +71,7 @@ func SendToTelegram(message string, proxyURL string, title string) {
 }
 
 func sendRequest(client *http.Client, apiURL string, jsonData []byte, retryCount *int) error {
+	fmt.Println("Request start to send to Telegram...")
 	resp, err := client.Post(apiURL, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
 		if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
