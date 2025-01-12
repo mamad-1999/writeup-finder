@@ -52,6 +52,3 @@ jobs:
 
       - name: Run Writeup Finder
         run: go run main.go --database --telegram
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}

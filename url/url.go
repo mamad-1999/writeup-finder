@@ -29,6 +29,8 @@ func ProcessUrls(urlList []string, today time.Time, database *sql.DB) int {
 		for _, article := range articles {
 			// Check if the article's title is new and if it was published today
 			if IsNewArticle(article, database, today) {
+				fmt.Println("New Article Found...")
+
 				message := FormatArticleMessage(article)
 				if err := HandleArticle(article, message, database); err != nil {
 					log.Printf("Error handling article %s: %v", article.GUID, err)
@@ -67,6 +69,8 @@ func FormatArticleMessage(item *gofeed.Item) string {
 }
 
 func HandleArticle(item *gofeed.Item, message string, database *sql.DB) error {
+	fmt.Println("Start Send to Telegram...")
+
 	if global.SendToTelegramFlag {
 		telegram.SendToTelegram(message, global.ProxyURL, item.Title)
 	}
