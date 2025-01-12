@@ -44,11 +44,11 @@ jobs:
           echo "PROGRAMMINGLANGS_THREAD_ID=4867" >> $GITHUB_WORKSPACE/.env
           echo "CVE_THREAD_ID=5189" >> $GITHUB_WORKSPACE/.env
           echo "OSINT_THREAD_ID=5782" >> $GITHUB_WORKSPACE/.env
-          echo "DB_HOST=${{ secrets.SUPABASE_DB_HOST }}" >> $GITHUB_WORKSPACE/.env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_WORKSPACE/.env
           echo "DB_PORT=5432" >> $GITHUB_WORKSPACE/.env
-          echo "DB_NAME=${{ secrets.SUPABASE_DB_NAME }}" >> $GITHUB_WORKSPACE/.env
-          echo "DB_USER=${{ secrets.SUPABASE_DB_USER }}" >> $GITHUB_WORKSPACE/.env
-          echo "DB_PASSWORD=${{ secrets.SUPABASE_DB_PASSWORD }}" >> $GITHUB_WORKSPACE/.env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_WORKSPACE/.env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_WORKSPACE/.env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_WORKSPACE/.env
 
       - name: Run Writeup Finder
         run: go run main.go --database --telegram
