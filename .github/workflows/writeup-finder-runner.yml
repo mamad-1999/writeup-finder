@@ -1,8 +1,6 @@
 name: Run Writeup Finder with Supabase
 
 on:
-  schedule:
-    - cron: "0 */2 * * *" # Runs every 2 hours
   workflow_dispatch: # Allows manual triggering
 
 jobs:
