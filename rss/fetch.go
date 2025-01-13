@@ -24,7 +24,7 @@ func FetchArticles(feedURL string) ([]*gofeed.Item, error) {
 	}
 
 	// Set headers for the request
-	req.Header.Set("User-Agent", "WriteupFinder/1.0")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0")
 	req.Header.Set("Accept", "application/rss+xml, application/xml;q=0.9, */*;q=0.8")
 
 	// Use the custom HTTP client to execute the request

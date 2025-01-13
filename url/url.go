@@ -50,7 +50,7 @@ func ProcessUrls(urlList []string, today time.Time, database *sql.DB) int {
 
 		// Introduce a delay of 2 seconds between processing URLs, except for the last one
 		if i < len(urlList)-1 {
-			time.Sleep(2 * time.Second)
+			time.Sleep(3 * time.Second)
 		}
 	}
 
