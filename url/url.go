@@ -18,28 +18,39 @@ import (
 func ProcessUrls(urlList []string, today time.Time, database *sql.DB) int {
 	articlesFound := 0
 
-	for _, url := range urlList {
+	for i, url := range urlList {
 		utils.PrintPretty(fmt.Sprintf("Processing feed: %s", url), color.FgMagenta, false)
+
+		// Fetch articles from the RSS feed
 		articles, err := rss.FetchArticles(url)
 		if err != nil {
 			log.Printf("Error fetching articles from %s: %v", url, err)
-			continue
+			continue // Skip this URL and move to the next one
 		}
 
+		// Process each article in the feed
 		for _, article := range articles {
-			// Check if the article's title is new and if it was published today
+			// Check if the article is new and was published today
 			if IsNewArticle(article, database, today) {
 				fmt.Println("New Article Found...")
 
+				// Format and handle the new article
 				message := FormatArticleMessage(article)
 				if err := HandleArticle(article, message, database); err != nil {
 					log.Printf("Error handling article %s: %v", article.GUID, err)
-					continue
+					continue // Skip handling this article and move to the next one
 				}
+
+				// Output the successfully handled article
 				fmt.Println(color.GreenString(message))
 				fmt.Println()
 				articlesFound++
 			}
+		}
+
+		// Introduce a delay of 2 seconds between processing URLs, except for the last one
+		if i < len(urlList)-1 {
+			time.Sleep(2 * time.Second)
 		}
 	}
 

@@ -35,7 +35,6 @@ func SendToTelegram(message string, proxyURL string, title string) {
 
 	// Load keywords from the JSON configuration
 	keywords, err := utils.LoadKeywords("data/keywords.json")
-	fmt.Println(keywords, "This is the keyword Load")
 	if err != nil {
 		utils.HandleError(err, "Failed to load keyword patterns", true)
 	}

@@ -11,46 +11,50 @@ import (
 
 // FetchArticles retrieves articles from the given feed URL.
 func FetchArticles(feedURL string) ([]*gofeed.Item, error) {
-	// Create a custom HTTP client with the User-Agent header
+	// Create a custom HTTP client with a timeout
 	client := &http.Client{
 		Timeout: time.Second * 10, // Set a timeout for the request
 	}
 
-	// Create a new request
+	// Create a new HTTP request
 	req, err := http.NewRequest("GET", feedURL, nil)
 	if err != nil {
 		utils.HandleError(err, "Error creating request", false)
-		return nil, err
+		return nil, err // Return the error after handling it
 	}
 
-	// Set a valid, commonly accepted User-Agent header for Linux (Ubuntu/Firefox)
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0")
+	// Set headers for the request
+	req.Header.Set("User-Agent", "WriteupFinder/1.0")
 	req.Header.Set("Accept", "application/rss+xml, application/xml;q=0.9, */*;q=0.8")
 
-	// Use the custom HTTP client to fetch the feed
+	// Use the custom HTTP client to execute the request
 	resp, err := client.Do(req)
 	if err != nil {
 		utils.HandleError(err, "Error fetching feed", false)
-		return nil, err // Return early to avoid nil dereference
+		return nil, err // Return the error after handling it
 	}
 	defer resp.Body.Close()
 
+	// Check for HTTP status code errors
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		err := fmt.Errorf("HTTP error: %s, status code: %d", resp.Status, resp.StatusCode)
+		utils.HandleError(err, "Invalid HTTP response", false)
+		return nil, err // Return the error with details
+	}
+
+	// Parse the RSS feed
 	parser := gofeed.NewParser()
 	feed, err := parser.Parse(resp.Body)
-
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("HTTP error: %s, status code: %d", resp.Status, resp.StatusCode)
-	}
-
-	// Handle error when fetching feed fails
 	if err != nil {
 		utils.HandleError(err, "Error parsing feed", false)
-		return nil, err // Return early to avoid nil dereference
+		return nil, err // Return the error after handling it
 	}
 
-	// Check if feed is nil
+	// Ensure the parsed feed is not nil
 	if feed == nil {
-		return nil, fmt.Errorf("no feed data received from URL: %s", feedURL)
+		err := fmt.Errorf("no feed data received from URL: %s", feedURL)
+		utils.HandleError(err, "Nil feed data", false)
+		return nil, err
 	}
 
 	return feed.Items, nil
@@ -60,8 +64,12 @@ func FetchArticles(feedURL string) ([]*gofeed.Item, error) {
 func ParseDate(dateString string) (time.Time, error) {
 	parsedTime, err := time.Parse(time.RFC1123Z, dateString)
 	if err != nil {
+		// Attempt parsing with an alternative format
 		parsedTime, err = time.Parse(time.RFC1123, dateString)
 	}
+
+	// Handle any parsing error, but allow the program to continue
 	utils.HandleError(err, "Error parsing date", false)
-	return parsedTime, nil
+
+	return parsedTime, err // Return both the parsed time and any error encountered
 }
