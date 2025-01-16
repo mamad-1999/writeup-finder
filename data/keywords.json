@@ -4,7 +4,7 @@
       "name": "general",
       "keywords": [
         {
-          "pattern": "\\$[0-9]+|[0-9]+\\$|\\¥[0-9]+|[0-9]+\\¥|\\bMoney\\b|My\\sFirst\\sBug\\sBounty|My\\sFirst\\sBounty|\\bVDP\\b",
+          "pattern": "\\$[0-9]+|[0-9]+\\$|¥[0-9]+|[0-9]+¥|\\bMoney\\b|My\\sFirst\\sBug\\sBounty|My\\sFirst\\sBounty|\\bVDP\\b",
           "threadID": "MONEY_THREAD_ID",
           "priority": 2
         },
