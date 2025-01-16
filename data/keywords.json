@@ -119,7 +119,7 @@
           "priority": 2
         },
         {
-          "pattern": "\\bCryptography\\b|\\bEncryption\\b|\\bDecryption\\b|\\bHashes\\b|\\bEncoding\\b|\\bDecoding\\b|\\bCipher\\b|\\bSymmetric\\s?Encryption\\b|\\bAsymmetric\\s?Encryption\\b|\\bRSA\\b|\\bAES\\b|\\bElliptic\\s?Curve\\b|\\bKey\\s?Management\\b|\\bDigital\\s?Signature\\b|\\bCryptanalysis\\b|\\bCryptographic\\s?Protocol\\b|\\bHMAC\\b|\\bSHA\\s?1\\b|\\bSHA\\s?2\\b|\\bSHA\\s?3\\b|\\bSHA-256\\b|\\bSHA-512\\b|\\bMD5\\b|\\bPBKDF2\\b|\\bSalt\\b|\\bBcrypt\\b|\\bArgon2\\b|\\bBlowfish\\b|\\bTwofish\\b|\\bSerpent\\b|\\bDES\\b|\\bTriple\\s?DES\\b|\\bGPG\\b|\\bOpenSSL\\b|\\bHashcat\\b|\\bJohn\\s?the\\s?Ripper\\b|\\bCain\\s?and\\s?Abel\\b|\\bCyberChef\\b|\\bBurp\\s?Suite\\b|\\bBase64\\b|\\bHex\\b|\\bROT13\\b",
+          "pattern": "\\bCryptography\\b|\\bEncryption\\b|\\bDecryption\\b|\\bHashes\\b|\\bEncoding\\b|\\bDecoding\\b|\\bCipher\\b|\\bSymmetric\\s?Encryption\\b|\\bAsymmetric\\s?Encryption\\b|\\bRSA\\b|\\bAES\\b|\\bElliptic\\s?Curve\\b|\\bKey\\s?Management\\b|\\bDigital\\s?Signature\\b|\\bCryptanalysis\\b|\\bCryptographic\\s?Protocol\\b|\\bHMAC\\b|\\bSHA\\s?1\\b|\\bSHA\\s?2\\b|\\bSHA\\s?3\\b|\\bSHA-256\\b|\\bSHA-512\\b|\\bMD5\\b|\\bPBKDF2\\b|\\bSalt\\b|\\bBcrypt\\b|\\bArgon2\\b|\\bBlowfish\\b|\\bTwofish\\b|\\bSerpent\\b|\\bDES\\b|\\bTriple\\s?DES\\b|\\bGPG\\b|\\bOpenSSL\\b|\\bHashcat\\b|\\bJohn\\s?the\\s?Ripper\\b|\\bCain\\s?and\\s?Abel\\b|\\bBase64\\b|\\bHex\\b|\\bROT13\\b",
           "threadID": "CRYPTOGRAPHIC_THREAD_ID",
           "priority": 2
         }
