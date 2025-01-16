@@ -9,10 +9,18 @@ https://medium.com/feed/tag/web-security-tools
 https://medium.com/feed/tag/recon
 https://medium.com/feed/tag/tryhackme
 https://medium.com/feed/tag/picoctf
+https://medium.com/feed/tag/hackthebox-writeup
 https://medium.com/feed/tag/hackerone
 https://medium.com/feed/tag/intigriti
 https://medium.com/feed/tag/osint
+https://medium.com/feed/tag/open-source-intelligence
+https://medium.com/feed/tag/osint-tools
+https://medium.com/feed/tag/intelligence
 https://medium.com/feed/tag/cve
+https://medium.com/feed/tag/exploit
+https://medium.com/feed/tag/hashing
+https://medium.com/feed/tag/cryptography
+https://medium.com/feed/tag/encryption
 https://medium.com/feed/tag/owasp-top-10
 https://medium.com/feed/tag/ssrf
 https://medium.com/feed/tag/sqli
@@ -61,6 +69,8 @@ https://medium.com/feed/tag/sql-injection
 https://medium.com/feed/tag/bug-bounty-writeup
 https://medium.com/feed/tag/bugbounty-writeup
 https://medium.com/feed/tag/bug-bounty-tips
+https://medium.com/feed/tag/mobile-hacking
+https://medium.com/feed/tag/android-hacking
 https://medium.com/feed/@NahamSec
 https://medium.com/feed/@jhaddix
 https://medium.com/feed/@TomNomNom
@@ -70,6 +80,7 @@ https://medium.com/feed/@projectdiscovery
 https://medium.com/feed/@infosecwriteups
 https://medium.com/feed/@securitylit
 https://medium.com/feed/@cappriciosec
+https://medium.com/feed/@projectdiscovery
 https://medium.com/feed/@newp_th
 https://medium.com/feed/@pdelteil
 https://ruvlol.medium.com/feed

@@ -44,6 +44,7 @@ func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 		"PROGRAMMINGLANGS_THREAD_ID": GetEnv("PROGRAMMINGLANGS_THREAD_ID"),
 		"CVE_THREAD_ID":              GetEnv("CVE_THREAD_ID"),
 		"OSINT_THREAD_ID":            GetEnv("OSINT_THREAD_ID"),
+		"CRYPTOGRAPHIC_THREAD_ID":    GetEnv("CRYPTOGRAPHIC_THREAD_ID"),
 	}
 
 	// Load JSON config
