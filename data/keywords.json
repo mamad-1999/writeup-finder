@@ -4,7 +4,7 @@
       "name": "general",
       "keywords": [
         {
-          "pattern": "\\$[0-9]+|\\bMoney\\b|My\\sFirst\\sBug\\sBounty|My\\sFirst\\sBounty|\\bVDP\\b",
+          "pattern": "\\$[0-9]+|[0-9]+\\$|\\¥[0-9]+|[0-9]+\\¥|\\bMoney\\b|My\\sFirst\\sBug\\sBounty|My\\sFirst\\sBounty|\\bVDP\\b",
           "threadID": "MONEY_THREAD_ID",
           "priority": 2
         },
@@ -74,7 +74,7 @@
       "name": "vulnerabilities",
       "keywords": [
         {
-          "pattern": "\\bSQL\\sInjection\\b|\\bCross(-|\\s)Site\\sScripting\\b|\\bXSS\\b|\\bCommand\\sInjection\\b|\\bRemote\\sCode\\sExecution\\b|\\bRCE\\b|\\bBuffer\\sOverflow\\b|\\bDenial\\sof\\sService\\b|\\bDoS\\b|\\bPath\\sTraversal\\b|\\bLocal\\sFile\\sInclusion\\b|\\bLFI\\b|\\bRemote\\sFile\\sInclusion\\b|\\bRFI\\b|\\bInsecure\\sDirect\\sObject\\sReferences\\b|\\bIDOR\\b|\\bSecurity\\sMisconfiguration\\b|\\bSensitive\\sData\\sExposure\\b|\\bBroken\\sAuthentication\\b|\\bBroken\\sAccess\\sControl\\b|\\bCross(-|\\s)Site\\sRequest\\sForgery\\b|\\bCSRF\\b|\\bClickjacking\\b|\\bXML\\sExternal\\sEntity\\b|\\bXXE\\b|\\bInsecure\\sDeserialization\\b|\\bRace\\sCondition\\b|\\bPrivilege\\sEscalation\\b|\\bInsufficient\\sLogging\\sand\\sMonitoring\\b|\\bServer-Side\\sRequest\\sForgery\\b|\\bSSRF\\b|\\bMass\\sAssignment\\b|\\bOpen\\sRedirect\\b|\\bDirectory\\sTraversal\\b|\\bCross-Origin\\sResource\\sSharing\\sMisconfiguration\\b|\\bCORS\\b|\\bHTTP\\sResponse\\sSplitting\\b|\\bHTTP\\sHeader\\sInjection\\b|\\bSession\\sFixation\\b|\\bCredential\\sStuffing\\b|\\bXML\\sInjection\\b|\\bJSON\\sInjection\\b|\\bCode\\sInjection\\b|\\bCommand\\sExecution\\b|\\bInformation\\sDisclosure\\b|\\bUnvalidated\\sRedirects\\sand\\sForwards\\b|\\bBusiness\\sLogic\\sVulnerabilities\\b|\\bPassword\\sReset\\b|\\bBasic\\sAuthentication\\b|\\bPassword\\sVulnerability\\b|\\bOauth\\sMisconfiguration\\b|\\b(web)?\\s?cache(\\s|-)(deception|Poisoning)\\b|\\b(HTTP\\s)?(Request\\s)?Smuggling\\b|\\b(weak\\s)?default(\\s|-)credentials\\b|\\bOpen\\sRedirect\\b|\\bNOSQL\\sinjection\\b|\\bATO\\b|\\bAccount\\sTake\\sOver\\b|\\bAPI\\sSecurity\\b|\\bSupply\\sChain\\sAttack\\b|\\bPayment\\sProcess\\sVulnerability\\b|\\bcryptographic\\sFailures\\b|\\bCookies\\sSteal\\b|\\bSSO\\b|\\bActive\\sDirectory\\b|\\bFile\\sUpload\\sVulnerability\\b|\\bWeb\\sSecurity\\b|\\bOAuth\\b|\\bUnauthorized\\sAccess\\b|\\bPII\\sInformation\\b|\\bP2\\sInformation\\b|\\bData\\sExfiltration\\b",
+          "pattern": "\\bSQL\\sInjection\\b|\\bSQLI\\b|\\bCross(-|\\s)Site\\sScripting\\b|\\bXSS\\b|\\bCommand\\sInjection\\b|\\bRemote\\sCode\\sExecution\\b|\\bRCE\\b|\\bBuffer\\sOverflow\\b|\\bDenial\\sof\\sService\\b|\\bDoS\\b|\\bPath\\sTraversal\\b|\\bLocal\\sFile\\sInclusion\\b|\\bLFI\\b|\\bRemote\\sFile\\sInclusion\\b|\\bRFI\\b|\\bInsecure\\sDirect\\sObject\\sReferences\\b|\\bIDOR\\b|\\bSecurity\\sMisconfiguration\\b|\\bSensitive\\sData\\sExposure\\b|\\bBroken\\sAuthentication\\b|\\bBroken\\sAccess\\sControl\\b|\\bCross(-|\\s)Site\\sRequest\\sForgery\\b|\\bCSRF\\b|\\bClickjacking\\b|\\bXML\\sExternal\\sEntity\\b|\\bXXE\\b|\\bInsecure\\sDeserialization\\b|\\bRace\\sCondition\\b|\\bPrivilege\\sEscalation\\b|\\bInsufficient\\sLogging\\sand\\sMonitoring\\b|\\bServer-Side\\sRequest\\sForgery\\b|\\bSSRF\\b|\\bMass\\sAssignment\\b|\\bOpen\\sRedirect\\b|\\bDirectory\\sTraversal\\b|\\bCross-Origin\\sResource\\sSharing\\sMisconfiguration\\b|\\bCORS\\b|\\bHTTP\\sResponse\\sSplitting\\b|\\bHTTP\\sHeader\\sInjection\\b|\\bSession\\sFixation\\b|\\bCredential\\sStuffing\\b|\\bXML\\sInjection\\b|\\bJSON\\sInjection\\b|\\bCode\\sInjection\\b|\\bCommand\\sExecution\\b|\\bInformation\\sDisclosure\\b|\\bUnvalidated\\sRedirects\\sand\\sForwards\\b|\\bBusiness\\sLogic\\sVulnerabilities\\b|\\bPassword\\sReset\\b|\\bBasic\\sAuthentication\\b|\\bPassword\\sVulnerability\\b|\\bOauth\\sMisconfiguration\\b|\\b(web)?\\s?cache(\\s|-)(deception|Poisoning)\\b|\\b(HTTP\\s)?(Request\\s)?Smuggling\\b|\\b(weak\\s)?default(\\s|-)credentials\\b|\\bOpen\\sRedirect\\b|\\bNOSQL\\sinjection\\b|\\bATO\\b|\\bAccount\\sTake\\sOver\\b|\\bAPI\\sSecurity\\b|\\bAPI\\sVulnerabilities\\b|\\bSupply\\sChain\\sAttack\\b|\\bPayment\\sProcess\\sVulnerability\\b|\\bcryptographic\\sFailures\\b|\\bCookies\\sSteal\\b|\\bSSO\\b|\\bActive\\sDirectory\\b|\\bFile\\sUpload\\sVulnerability\\b|\\bWeb\\sSecurity\\b|\\bOAuth\\b|\\bOAuth2\\b|\\bUnauthorized\\sAccess\\b|\\bPII\\sInformation\\b|\\bP2\\sInformation\\b|\\bData\\sExfiltration\\b|\\bSSTI\\b|\\bRXSS\\b",
           "threadID": "VULNERABILITIES_THREAD_ID",
           "priority": 7
         },
@@ -109,12 +109,12 @@
           "priority": 5
         },
         {
-          "pattern": "\\bCTFs\\b|\\bCapture\\s?The\\s?Flag\\b|\\bCTF\\b|\\bpicoctf\\b",
+          "pattern": "\\bCTFs\\b|\\bCapture\\s?The\\s?Flag\\b|\\bCTF\\b|\\bpicoctf\\b|\\bvulnhub\\b|\\bUOFTCTF\\b|\\bUOFTCTF-CTF\\b|\\bVulnyx\\b|\\beJPT\\b|\\bHackMyVM\\b",
           "threadID": "CTF_THREAD_ID",
           "priority": 6
         },
         {
-          "pattern": "\\bOSINT\\b|\\bOpen-Source\\s?Intelligence\\b|\\bOpen\\s?Source\\s?Intelligence\\b|\\bOsint4fun\\b",
+          "pattern": "\\bOSINT\\b|\\bOpen-Source\\s?Intelligence\\b|\\bOpen\\s?Source\\s?Intelligence\\b|\\bOsint4fun\\b|\\bImage\\sGeolocation\\b|\\bGeolocation\\b",
           "threadID": "OSINT_THREAD_ID",
           "priority": 2
         }
