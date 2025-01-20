@@ -119,6 +119,16 @@
           "priority": 3
         },
         {
+          "pattern": "\\bSteganography\\b|\\bStego\\b|\\bHidden\\sData\\b|\\bData\\sHiding\\b|\\bLSB\\b|\\bLeast\\sSignificant\\sBit\\b|\\bImage\\sSteganography\\b|\\bAudio\\sSteganography\\b|\\bVideo\\sSteganography\\b",
+          "threadID": "STEGANOGRAPHY_THREAD_ID",
+          "priority": 3
+        },
+        {
+          "pattern": "\\bWeb\\sScraping\\b|\\bScraping\\b|\\bScraper\\b|\\bData\\sExtraction\\b|\\bBeautifulSoup\\b|\\bSelenium\\b|\\bPuppeteer\\b|\\bWeb\\sCrawler\\b|\\bHTTP\\sRequests\\b|\\bParse\\b",
+          "threadID": "WEBSCRAPING_THREAD_ID",
+          "priority": 3
+        },
+        {
           "pattern": "\\bCryptography\\b|\\bEncryption\\b|\\bDecryption\\b|\\bHashes\\b|\\bEncoding\\b|\\bDecoding\\b|\\bCipher\\b|\\bSymmetric\\s?Encryption\\b|\\bAsymmetric\\s?Encryption\\b|\\bRSA\\b|\\bAES\\b|\\bElliptic\\s?Curve\\b|\\bKey\\s?Management\\b|\\bDigital\\s?Signature\\b|\\bCryptanalysis\\b|\\bCryptographic\\s?Protocol\\b|\\bHMAC\\b|\\bSHA\\s?1\\b|\\bSHA\\s?2\\b|\\bSHA\\s?3\\b|\\bSHA-256\\b|\\bSHA-512\\b|\\bMD5\\b|\\bPBKDF2\\b|\\bSalt\\b|\\bBcrypt\\b|\\bArgon2\\b|\\bBlowfish\\b|\\bTwofish\\b|\\bSerpent\\b|\\bDES\\b|\\bTriple\\s?DES\\b|\\bGPG\\b|\\bOpenSSL\\b|\\bHashcat\\b|\\bJohn\\s?the\\s?Ripper\\b|\\bCain\\s?and\\s?Abel\\b|\\bBase64\\b|\\bHex\\b|\\bROT13\\b|\\bHashing\\b",
           "threadID": "CRYPTOGRAPHIC_THREAD_ID",
           "priority": 8

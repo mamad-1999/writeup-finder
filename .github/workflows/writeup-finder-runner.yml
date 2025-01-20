@@ -44,6 +44,8 @@ jobs:
           echo "PROGRAMMINGLANGS_THREAD_ID=4867" >> $GITHUB_WORKSPACE/.env
           echo "CVE_THREAD_ID=5189" >> $GITHUB_WORKSPACE/.env
           echo "OSINT_THREAD_ID=5782" >> $GITHUB_WORKSPACE/.env
+          echo "STEGANOGRAPHY_THREAD_ID=9239" >> $GITHUB_WORKSPACE/.env
+          echo "WEBSCRAPING_THREAD_ID=9242" >> $GITHUB_WORKSPACE/.env
           echo "CRYPTOGRAPHIC_THREAD_ID=8668" >> $GITHUB_WORKSPACE/.env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_WORKSPACE/.env
           echo "DB_PORT=5432" >> $GITHUB_WORKSPACE/.env

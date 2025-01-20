@@ -1,3 +1,16 @@
+https://medium.com/feed/tag/Steganography
+https://medium.com/feed/tag/Image-Steganography
+https://medium.com/feed/tag/Digital-Steganography
+https://medium.com/feed/tag/Audio-Steganography
+https://medium.com/feed/tag/Video-Steganography
+https://medium.com/feed/tag/Text-Steganography
+https://medium.com/feed/tag/Types-Of-Steganography
+
+https://medium.com/feed/tag/Web-Scrapping
+https://medium.com/feed/tag/Web-Scraping
+https://medium.com/feed/tag/Web-Scraping-Tools
+https://medium.com/feed/tag/Web-Scraping-Tips
+
 https://medium.com/feed/tag/bug-bounty-program
 https://medium.com/feed/tag/bug-hunting
 https://medium.com/feed/tag/web-security
