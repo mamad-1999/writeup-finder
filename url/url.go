@@ -60,8 +60,18 @@ func ProcessUrls(urlList []string, today time.Time, database *sql.DB) int {
 func IsNewArticle(item *gofeed.Item, db *sql.DB, today time.Time) bool {
 	// Parse the publication date of the article
 	pubDate, err := rss.ParseDate(item.Published)
-	if err != nil || pubDate.Format(global.DateFormat) != today.Format(global.DateFormat) {
-		// Article is not from today
+	if err != nil {
+		// If parsing fails, treat it as not a new article
+		return false
+	}
+
+	// Check if the publication date matches today or yesterday
+	yesterday := today.AddDate(0, 0, -1)
+	isToday := pubDate.Format(global.DateFormat) == today.Format(global.DateFormat)
+	isYesterday := pubDate.Format(global.DateFormat) == yesterday.Format(global.DateFormat)
+
+	if !isToday && !isYesterday {
+		// Article is neither from today nor yesterday
 		return false
 	}
 
@@ -71,7 +81,7 @@ func IsNewArticle(item *gofeed.Item, db *sql.DB, today time.Time) bool {
 	err = db.QueryRow(query, item.Title).Scan(&exists)
 	utils.HandleError(err, "Error checking if article title exists in database", false)
 
-	// Return true only if the article is from today and does not exist in the database
+	// Return true only if the article does not exist in the database
 	return !exists
 }
 
