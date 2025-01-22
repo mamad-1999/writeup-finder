@@ -8,25 +8,31 @@ import (
 	"sort"
 )
 
+// KeywordPattern represents a compiled regex pattern, its associated thread ID, and priority.
 type KeywordPattern struct {
 	Pattern  *regexp.Regexp
 	ThreadID string
 	Priority int
 }
 
+// RawKeyword represents a keyword pattern and its associated thread ID and priority as loaded from JSON.
 type RawKeyword struct {
 	Pattern  string `json:"pattern"`
 	ThreadID string `json:"threadID"`
 	Priority int    `json:"priority"`
 }
 
+// KeywordGroup represents a group of keywords with a common name.
 type KeywordGroup struct {
 	Name     string       `json:"name"`
 	Keywords []RawKeyword `json:"keywords"`
 }
 
+// LoadKeywords loads keyword patterns from a JSON configuration file and compiles them into regex patterns.
+// It also maps thread IDs from environment variables and sorts the keywords by priority.
+// Returns a slice of KeywordPattern or an error if the file cannot be read or the regex cannot be compiled.
 func LoadKeywords(configPath string) ([]KeywordPattern, error) {
-	// Prepopulate thread IDs from environment variables
+	// Map thread IDs from environment variables
 	threadIDMap := map[string]string{
 		"MONEY_THREAD_ID":            GetEnv("MONEY_THREAD_ID"),
 		"BYPASS_THREAD_ID":           GetEnv("BYPASS_THREAD_ID"),
@@ -49,7 +55,7 @@ func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 		"WEBSCRAPING_THREAD_ID":      GetEnv("WEBSCRAPING_THREAD_ID"),
 	}
 
-	// Load JSON config
+	// Load JSON configuration file
 	file, err := os.Open(configPath)
 	if err != nil {
 		return nil, err
@@ -64,7 +70,7 @@ func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 		return nil, err
 	}
 
-	// Parse keywords and compile patterns
+	// Parse keywords and compile regex patterns
 	var keywords []KeywordPattern
 	for _, group := range rawConfig.Groups {
 		for _, raw := range group.Keywords {
@@ -84,7 +90,7 @@ func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 		}
 	}
 
-	// Sort by priority
+	// Sort keywords by priority (ascending order)
 	sort.Slice(keywords, func(i, j int) bool {
 		return keywords[i].Priority < keywords[j].Priority
 	})
@@ -92,7 +98,8 @@ func LoadKeywords(configPath string) ([]KeywordPattern, error) {
 	return keywords, nil
 }
 
-// MatchKeyword finds the thread ID for the first matching keyword in the title
+// MatchKeyword searches for the first keyword pattern that matches the given title.
+// It returns the associated thread ID if a match is found, otherwise returns the default thread ID.
 func MatchKeyword(title string, keywords []KeywordPattern, defaultThreadID string) string {
 	for _, keyword := range keywords {
 		if keyword.Pattern.MatchString(title) {

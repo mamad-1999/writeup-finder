@@ -8,33 +8,41 @@ import (
 	"github.com/fatih/color"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"writeup-finder.go/config"
 	"writeup-finder.go/db"
 	"writeup-finder.go/global"
-	"writeup-finder.go/url"
+	"writeup-finder.go/handler"
 	"writeup-finder.go/utils"
 )
 
+// Package command defines the CLI commands for the writeup-finder tool,
+// including the root command and subcommands for completion.
+
+// rootCmd is the main command for the writeup-finder CLI tool.
 var rootCmd = &cobra.Command{
 	Use:   "writeup-finder",
 	Short: "A tool to find writeups and manage articles",
 	Long:  `Writeup-finder is a tool to search for writeups and manage article data, including sending notifications.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if cmd.CalledAs() != "completion" {
-			config.LoadEnv()
+			// Load environment variables and flags
+			utils.LoadEnv()
 			ManageFlags()
 			utils.PrintPretty("Starting Writeup Finder Script", color.FgHiYellow, true)
 
+			// Connect to the database if enabled
 			if global.UseDatabase {
 				global.DB = db.ConnectDB()
 				db.CreateArticlesTable(global.DB)
 				defer global.DB.Close()
 			}
+
+			// Execute main logic of the script
 			ManageAction()
 		}
 	},
 }
 
+// completionCmd generates shell autocompletion scripts.
 var completionCmd = &cobra.Command{
 	Use:   "completion [bash|zsh]",
 	Short: "Generate autocompletion script",
@@ -67,7 +75,7 @@ Zsh:
 	},
 }
 
-// Execute runs the root command, to be called in main
+// Execute runs the root command, to be called in main.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
@@ -75,7 +83,7 @@ func Execute() {
 	}
 }
 
-// Initialize global variables and flags
+// init initializes global flags and subcommands.
 func init() {
 	rootCmd.PersistentFlags().BoolVar(&global.UseDatabase, "database", false, "Save new articles in the database")
 	rootCmd.PersistentFlags().BoolVar(&global.SendToTelegramFlag, "telegram", false, "Send new articles to Telegram")
@@ -85,7 +93,7 @@ func init() {
 	rootCmd.AddCommand(completionCmd)
 }
 
-// ManageFlags handles the main logic after flag parsing
+// ManageFlags validates and logs the parsed flags.
 func ManageFlags() {
 	ValidateFlags()
 
@@ -99,22 +107,24 @@ func ManageFlags() {
 	}
 }
 
-// ValidateFlags checks the combination of flags and throws errors for invalid input
+// ValidateFlags ensures that flag combinations are valid and throws errors for invalid input.
 func ValidateFlags() {
 	if !global.UseDatabase {
-		log.Fatal("You must specify -d (database) to save articles in the database.")
+		log.Fatal("You must specify --database to save articles in the database.")
 	}
 
 	if global.ProxyURL != "" && !global.SendToTelegramFlag {
-		log.Fatal("Error: --proxy option is only valid when used with -t (send to Telegram).")
+		log.Fatal("Error: --proxy option is only valid when used with --telegram.")
 	}
 }
 
+// ManageAction processes the list of URLs, finds new articles, and logs the results.
 func ManageAction() {
 	urlList := utils.ReadUrls(global.UrlFile)
 	today := time.Now()
 
-	articlesFound := url.ProcessUrls(urlList, today, global.DB)
+	// Process the URLs and store new articles in the database if enabled
+	articlesFound := handler.ProcessUrls(urlList, today, global.DB)
 
 	utils.PrintPretty(fmt.Sprintf("Total new articles found: %d", articlesFound), color.FgYellow, false)
 	utils.PrintPretty("Writeup Finder Script Completed", color.FgHiYellow, true)

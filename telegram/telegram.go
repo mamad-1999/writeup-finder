@@ -14,6 +14,7 @@ import (
 	"writeup-finder.go/utils"
 )
 
+// TelegramMessage represents the structure of a message to be sent to Telegram.
 type TelegramMessage struct {
 	ChatID          string `json:"chat_id"`
 	Text            string `json:"text"`
@@ -21,11 +22,13 @@ type TelegramMessage struct {
 }
 
 const (
-	maxRetries    = 5
-	retryDelay    = 2 * time.Second
-	rateLimitBase = 2
+	maxRetries    = 5               // Maximum number of retries for sending a message
+	retryDelay    = 2 * time.Second // Delay between retries
+	rateLimitBase = 2               // Base multiplier for rate limit backoff
 )
 
+// SendToTelegram sends a message to a Telegram channel using the provided proxy.
+// It handles retries, rate limiting, and thread selection based on the message type (YouTube or keyword-based).
 func SendToTelegram(message string, proxyURL string, title string, isYoutube bool) {
 	botToken := utils.GetEnv("TELEGRAM_BOT_TOKEN")
 	channelID := utils.GetEnv("CHAT_ID")
@@ -35,7 +38,6 @@ func SendToTelegram(message string, proxyURL string, title string, isYoutube boo
 	var messageThreadID string
 
 	if isYoutube {
-		// Use the YouTube thread ID directly
 		messageThreadID = youtubeThreadID
 	} else {
 		// Load keywords from the JSON configuration
@@ -48,7 +50,6 @@ func SendToTelegram(message string, proxyURL string, title string, isYoutube boo
 		messageThreadID = utils.MatchKeyword(title, keywords, mainThreadID)
 	}
 
-	// Send the message
 	apiURL := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
 	telegramMessage := TelegramMessage{
 		ChatID:          channelID,
@@ -78,6 +79,8 @@ func SendToTelegram(message string, proxyURL string, title string, isYoutube boo
 	}
 }
 
+// sendRequest sends an HTTP POST request to the Telegram API.
+// It handles retries for network errors, rate limiting, and unexpected status codes.
 func sendRequest(client *http.Client, apiURL string, jsonData []byte, retryCount *int) error {
 	resp, err := client.Post(apiURL, "application/json", bytes.NewBuffer(jsonData))
 	if err != nil {
@@ -110,6 +113,8 @@ func sendRequest(client *http.Client, apiURL string, jsonData []byte, retryCount
 	return fmt.Errorf("failed to send message, status code: %d", resp.StatusCode)
 }
 
+// ValidateProxyURL checks if the provided proxy URL is valid and supported.
+// It returns an error if the scheme is unsupported or the hostname is missing.
 func ValidateProxyURL(proxyURL string) error {
 	parsedURL, err := url.Parse(proxyURL)
 	utils.HandleError(err, "Error:", true)

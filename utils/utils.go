@@ -11,6 +11,7 @@ import (
 )
 
 // ReadUrls reads a list of URLs from a text file and returns them as a slice of strings.
+// It trims whitespace and skips empty lines. If the file cannot be opened or read, it logs an error.
 func ReadUrls(filePath string) []string {
 	file, err := os.Open(filePath)
 	HandleError(err, "Error opening URL file", false)
@@ -32,7 +33,8 @@ func ReadUrls(filePath string) []string {
 	return urls
 }
 
-// HandleError prints an error message and optionally exits the program.
+// HandleError logs an error message with optional coloring and exits the program if specified.
+// It is used to handle errors consistently across the application.
 func HandleError(err error, message string, exit bool) {
 	if err != nil {
 		fmt.Println(color.RedString("%s: %s", message, err))
@@ -43,6 +45,8 @@ func HandleError(err error, message string, exit bool) {
 }
 
 // PrintPretty prints a message with optional coloring and formatting.
+// If isTitle is true, it centers the message and adds a border for emphasis.
+// Otherwise, it prints the message with a timestamp.
 func PrintPretty(message string, colorAttr color.Attribute, isTitle bool) {
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	colored := color.New(colorAttr).SprintFunc()
@@ -58,6 +62,8 @@ func PrintPretty(message string, colorAttr color.Attribute, isTitle bool) {
 	}
 }
 
+// GetEnv retrieves the value of an environment variable.
+// If the variable is not set, it logs an error and returns an empty string.
 func GetEnv(key string) string {
 	value := os.Getenv(key)
 	if value == "" {

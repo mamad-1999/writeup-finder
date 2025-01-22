@@ -1,3 +1,5 @@
+These Youtube channel is used in script:
+
 NahamSec: https://www.youtube.com/feeds/videos.xml?channel_id=UCCZDt7MuC3Hzs6IH4xODLBw  
 PentesterLand: https://www.youtube.com/feeds/videos.xml?channel_id=UCO9Qw6grdoSJhVy8NHjuuiQ  
 ippsec: https://www.youtube.com/feeds/videos.xml?channel_id=UCa6eh7gCkpPo5XXUDfygQQA  
