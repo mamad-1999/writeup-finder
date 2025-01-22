@@ -6,7 +6,15 @@ https://medium.com/feed/tag/Video-Steganography
 https://medium.com/feed/tag/Text-Steganography
 https://medium.com/feed/tag/Types-Of-Steganography
 
-https://www.youtube.com/feeds/videos.xml?channel_id=
+https://www.youtube.com/feeds/videos.xml?channel_id=UCCZDt7MuC3Hzs6IH4xODLBw  
+https://www.youtube.com/feeds/videos.xml?channel_id=UCO9Qw6grdoSJhVy8NHjuuiQ  
+https://www.youtube.com/feeds/videos.xml?channel_id=UCa6eh7gCkpPo5XXUDfygQQA  
+https://www.youtube.com/feeds/videos.xml?channel_id=UCz4A6ALhUVHuiXzoJrIGc1Q  
+https://www.youtube.com/feeds/videos.xml?channel_id=UCSGYQv26CXeE8q9w2X4NttA  
+https://www.youtube.com/feeds/videos.xml?channel_id=UCVeW9qkBjo3zosnqUbG7CFw  
+https://www.youtube.com/feeds/videos.xml?channel_id=UCTnOFmMwZIi7jJYS_nAfeyQ  
+https://www.youtube.com/feeds/videos.xml?channel_id=UCEeuul0q7C8Zs5C8rc4REFQ  
+https://www.youtube.com/feeds/videos.xml?channel_id=UCUvkPEm38w6pq8w5QYgtPPw  
 
 https://medium.com/feed/tag/Web-Scrapping
 https://medium.com/feed/tag/Web-Scraping
@@ -171,4 +179,5 @@ https://d0nut.medium.com/feed
 https://medium.com/feed/towards-aws
 https://medium.com/@stackzero/feed
 https://surya-dev.medium.com/feed
+
 https://infosecwriteups.com/feed
