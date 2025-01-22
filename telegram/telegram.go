@@ -26,19 +26,27 @@ const (
 	rateLimitBase = 2
 )
 
-func SendToTelegram(message string, proxyURL string, title string) {
+func SendToTelegram(message string, proxyURL string, title string, isYoutube bool) {
 	botToken := utils.GetEnv("TELEGRAM_BOT_TOKEN")
 	channelID := utils.GetEnv("CHAT_ID")
 	mainThreadID := utils.GetEnv("MAIN_THREAD_ID")
+	youtubeThreadID := utils.GetEnv("YOUTUBE_THREAD_ID")
 
-	// Load keywords from the JSON configuration
-	keywords, err := utils.LoadKeywords("data/keywords.json")
-	if err != nil {
-		utils.HandleError(err, "Failed to load keyword patterns", true)
+	var messageThreadID string
+
+	if isYoutube {
+		// Use the YouTube thread ID directly
+		messageThreadID = youtubeThreadID
+	} else {
+		// Load keywords from the JSON configuration
+		keywords, err := utils.LoadKeywords("data/keywords.json")
+		if err != nil {
+			utils.HandleError(err, "Failed to load keyword patterns", true)
+		}
+
+		// Determine the message thread ID based on title keywords
+		messageThreadID = utils.MatchKeyword(title, keywords, mainThreadID)
 	}
-
-	// Determine the message thread ID
-	messageThreadID := utils.MatchKeyword(title, keywords, mainThreadID)
 
 	// Send the message
 	apiURL := fmt.Sprintf("https://api.telegram.org/bot%s/sendMessage", botToken)
