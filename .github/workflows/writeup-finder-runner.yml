@@ -47,6 +47,7 @@ jobs:
           echo "STEGANOGRAPHY_THREAD_ID=9239" >> $GITHUB_WORKSPACE/.env
           echo "WEBSCRAPING_THREAD_ID=9242" >> $GITHUB_WORKSPACE/.env
           echo "CRYPTOGRAPHIC_THREAD_ID=8668" >> $GITHUB_WORKSPACE/.env
+          echo "YOUTUBE_THREAD_ID=9400" >> $GITHUB_WORKSPACE/.env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_WORKSPACE/.env
           echo "DB_PORT=5432" >> $GITHUB_WORKSPACE/.env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_WORKSPACE/.env
