@@ -47,17 +47,21 @@ Use "writeup-finder [command] --help" for more information about a command.
 - It filters topics based on the title and sends them to the corresponding topic in the Telegram group.
 
 ```
-# Directory structure of WriteUp-finder
-
-├── .env 
+── .env 
 ├── .env.example 
+├── .github/ 
+│   └── workflows/ 
+│       └── writeup-finder-runner.yml 
 ├── .gitignore 
+├── CHANGELOG.md 
 ├── README.md 
 ├── command/ 
-│   └── command.go 
-├── config/ 
-│   └── env.go 
+│   ├── action.go 
+│   ├── command.go 
+│   ├── completion.go 
+│   └── flags.go 
 ├── data/ 
+│   ├── Youtube_channel.md 
 │   ├── keywords.json 
 │   └── url.txt 
 ├── db/ 
@@ -66,17 +70,23 @@ Use "writeup-finder [command] --help" for more information about a command.
 │   └── global.go 
 ├── go.mod 
 ├── go.sum 
+├── handler/ 
+│   ├── handler.go 
+│   ├── medium.go 
+│   ├── utils.go 
+│   └── youtube.go 
 ├── main.go 
-├── rss/ 
-│   └── fetch.go 
 ├── run_writeUp-finder.sh 
 ├── telegram/ 
+│   ├── message.go 
+│   ├── proxy.go 
+│   ├── request.go 
 │   └── telegram.go 
-├── url/ 
-│   └── url.go 
 ├── utils/ 
+│   ├── env.go 
 │   ├── filters.go 
 │   ├── http.go 
+│   ├── rss.go 
 │   └── utils.go 
 └── writeup-finder 
 ```
