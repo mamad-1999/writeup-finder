@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/fatih/color"
@@ -122,7 +123,7 @@ func processYouTubeFeed(url string, today time.Time, database *sql.DB) int {
 
 // isYouTubeFeed checks if the URL is a YouTube RSS feed
 func isYouTubeFeed(url string) bool {
-	return len(url) > 0 && (url[:30] == "https://www.youtube.com/feeds/")
+	return strings.HasPrefix(url, "https://www.youtube.com/feeds/")
 }
 
 func IsNewArticle(item *gofeed.Item, db *sql.DB, today time.Time) bool {
