@@ -48,9 +48,9 @@ func FormatArticleMessage(item *gofeed.Item) string {
 
 // HandleArticle manages sending an article to Telegram and saving it to the database if enabled.
 func HandleArticle(item *gofeed.Item, message string, database *sql.DB, isYoutube bool) error {
-	fmt.Println("Start Send to Telegram...")
-
 	if global.SendToTelegramFlag {
+		fmt.Println("Start Send to Telegram...")
+
 		telegram.SendToTelegram(message, global.ProxyURL, item.Title, isYoutube)
 	}
 
