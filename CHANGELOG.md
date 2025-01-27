@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- Detect the premium medium article.
+- Update the version of Go to 1.23.5
+
+### Added
+
 - Chunked large files into smaller, more manageable files for better maintainability.
 - Added comments to improve code readability and documentation.
 

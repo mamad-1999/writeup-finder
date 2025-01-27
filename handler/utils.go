@@ -46,6 +46,11 @@ func IsNewArticle(item *gofeed.Item, db *sql.DB, today time.Time) bool {
 
 // FormatArticleMessage creates a formatted string for an article's details.
 func FormatArticleMessage(item *gofeed.Item) string {
+	// Check if the GUID starts with "https://medium.com"
+	if !strings.HasPrefix(item.GUID, "https://medium.com") {
+		return fmt.Sprintf("\u25BA %s\nPublished: %s\nLink: %s", item.Title, item.Published, item.GUID)
+	}
+
 	premium, err := isPremium(item.GUID)
 	if err != nil {
 		log.Fatalf("Error: %v", err)
