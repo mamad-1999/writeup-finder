@@ -1,11 +1,14 @@
 package handler
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
+	"github.com/chromedp/chromedp"
 	"github.com/mmcdole/gofeed"
 	"writeup-finder.go/db"
 	"writeup-finder.go/global"
@@ -43,7 +46,68 @@ func IsNewArticle(item *gofeed.Item, db *sql.DB, today time.Time) bool {
 
 // FormatArticleMessage creates a formatted string for an article's details.
 func FormatArticleMessage(item *gofeed.Item) string {
+	premium, err := isPremium(item.GUID)
+	if err != nil {
+		log.Fatalf("Error: %v", err)
+	}
+
+	// If the article is premium, change the domain
+	if premium {
+		item.GUID = strings.Replace(item.GUID, "https://medium.com", "https://readmedium.com", 1)
+	}
+
 	return fmt.Sprintf("\u25BA %s\nPublished: %s\nLink: %s", item.Title, item.Published, item.GUID)
+}
+
+func isPremium(url string) (bool, error) {
+	// Create a new allocator with custom user agent
+	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		chromedp.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"),
+	)
+
+	// Create a new context with the allocator
+	ctx, cancel := chromedp.NewExecAllocator(context.Background(), opts...)
+	defer cancel()
+
+	// Create a new browser context
+	ctx, cancel = chromedp.NewContext(ctx)
+	defer cancel()
+
+	// Set a timeout for the entire operation
+	ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
+
+	var isPremium bool
+
+	// Run the browser tasks
+	err := chromedp.Run(ctx,
+		chromedp.Navigate(url),
+		chromedp.WaitReady("body"), // Wait for the body to load
+		chromedp.Evaluate(`document.querySelectorAll('[aria-label="Close"]').forEach(btn => btn.click());`, nil), // Close popups
+		chromedp.Evaluate(`{
+			// Check for "Member-only story" text
+			const xpathCheck = document.evaluate(
+				'//*[contains(text(), "Member-only story")]',
+				document,
+				null,
+				XPathResult.ANY_TYPE,
+				null
+			);
+			const hasMemberText = xpathCheck.iterateNext() !== null;
+
+			// Check for the golden star icon
+			const hasGoldenStar = document.querySelector('svg[fill="#FFC017"]') !== null;
+
+			// Return true if either condition is met
+			hasMemberText || hasGoldenStar;
+		}`, &isPremium),
+	)
+
+	if err != nil {
+		return false, fmt.Errorf("error checking %s: %v", url, err)
+	}
+
+	return isPremium, nil
 }
 
 // HandleArticle manages sending an article to Telegram and saving it to the database if enabled.
