@@ -63,6 +63,7 @@ func isPremium(url string) (bool, error) {
 	// Create a new allocator with custom user agent
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"),
+		chromedp.Flag("no-sandbox", true), // Add this line
 	)
 
 	// Create a new context with the allocator
