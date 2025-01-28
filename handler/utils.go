@@ -53,7 +53,8 @@ func FormatArticleMessage(item *gofeed.Item) string {
 
 	premium, err := isPremium(item.GUID)
 	if err != nil {
-		log.Fatalf("Error: %v", err)
+		log.Printf("Error checking premium status for URL %s: %v. Skipping URL.", item.GUID, err)
+		return fmt.Sprintf("\u25BA %s\nPublished: %s\nLink: %s", item.Title, item.Published, item.GUID)
 	}
 
 	// If the article is premium, change the domain
@@ -65,10 +66,10 @@ func FormatArticleMessage(item *gofeed.Item) string {
 }
 
 func isPremium(url string) (bool, error) {
-	// Create a new allocator with custom user agent
+	// Custom user agent and allocator options
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"),
-		chromedp.Flag("no-sandbox", true), // Add this line
+		chromedp.Flag("no-sandbox", true),
 	)
 
 	// Create a new context with the allocator
@@ -80,7 +81,7 @@ func isPremium(url string) (bool, error) {
 	defer cancel()
 
 	// Set a timeout for the entire operation
-	ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
+	ctx, cancel = context.WithTimeout(ctx, 60*time.Second) // Extended timeout
 	defer cancel()
 
 	var isPremium bool
@@ -91,7 +92,6 @@ func isPremium(url string) (bool, error) {
 		chromedp.WaitReady("body"), // Wait for the body to load
 		chromedp.Evaluate(`document.querySelectorAll('[aria-label="Close"]').forEach(btn => btn.click());`, nil), // Close popups
 		chromedp.Evaluate(`{
-			// Check for "Member-only story" text
 			const xpathCheck = document.evaluate(
 				'//*[contains(text(), "Member-only story")]',
 				document,
@@ -101,16 +101,14 @@ func isPremium(url string) (bool, error) {
 			);
 			const hasMemberText = xpathCheck.iterateNext() !== null;
 
-			// Check for the golden star icon
 			const hasGoldenStar = document.querySelector('svg[fill="#FFC017"]') !== null;
 
-			// Return true if either condition is met
 			hasMemberText || hasGoldenStar;
 		}`, &isPremium),
 	)
 
 	if err != nil {
-		return false, fmt.Errorf("error checking %s: %v", url, err)
+		return false, fmt.Errorf("error checking premium status for %s: %v", url, err)
 	}
 
 	return isPremium, nil
