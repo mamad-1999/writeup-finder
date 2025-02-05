@@ -17,10 +17,10 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.23.5
+
       - name: Install dependencies
         run: go mod tidy
 
-      # Step 4: Create .env file in the repository root
       - name: Create .env file
         run: |
           echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> $GITHUB_WORKSPACE/.env
@@ -54,4 +54,18 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_WORKSPACE/.env
 
       - name: Run Writeup Finder
-        run: go run main.go --database --telegram
+        id: run-writeup-finder
+        run: |
+          set +e
+          go run main.go --database --telegram
+          if [ $? -ne 0 ]; then
+            echo "::set-output name=error_message::Writeup Finder failed with error"
+            exit 1
+          fi
+
+      - name: Notify Error Alarm Channel
+        if: steps.run-writeup-finder.outputs.error_message
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+          -d chat_id=${{ secrets.ERROR_ALARM_CHANNEL_ID }} \
+          -d text="Error in Writeup Finder: ${{ steps.run-writeup-finder.outputs.error_message }}"
