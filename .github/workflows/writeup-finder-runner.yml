@@ -68,4 +68,4 @@ jobs:
         run: |
           curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
           -d chat_id=${{ secrets.ERROR_ALARM_CHANNEL_ID }} \
-          -d text="Error in Writeup Finder: ${{ steps.run-writeup-finder.outputs.error_message }}"
+          -d text="🚨 Error in Writeup Finder: ${{ steps.run-writeup-finder.outputs.error_message }}"
