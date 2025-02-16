@@ -1,9 +1,9 @@
 # Writeup Finder
 
 [![Go Version](https://img.shields.io/badge/go-1.17%20%7C%201.18%20%7C%201.19%20%7C%201.20-blue)](https://golang.org/dl/)
-[![GitHub Issues](https://img.shields.io/github/issues/mamad-1999/writeup-finder)](https://github.com/mamad-1999/writeup-finder/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/mamad-1999/writeup-finder)](https://github.com/mamad-1999/writeup-finder/stargazers)
-[![GitHub License](https://img.shields.io/github/license/mamad-1999/writeup-finder)](https://github.com/mamad-1999/writeup-finder/blob/master/LICENSE)
+[![GitHub Issues](https://img.shields.io/github/issues/blackvoidx/writeup-finder)](https://github.com/blackvoidx/writeup-finder/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/blackvoidx/writeup-finder)](https://github.com/blackvoidx/writeup-finder/stargazers)
+[![GitHub License](https://img.shields.io/github/license/blackvoidx/writeup-finder)](https://github.com/blackvoidx/writeup-finder/blob/master/LICENSE)
 
 <p>
     <a href="https://skillicons.dev">
