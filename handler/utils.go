@@ -59,7 +59,7 @@ func FormatArticleMessage(item *gofeed.Item) string {
 
 	// If the article is premium, change the domain
 	if premium {
-		item.GUID = strings.Replace(item.GUID, "https://medium.com", "https://readmedium.com", 1)
+		item.GUID = strings.Replace(item.GUID, "https://medium.com", "https://freedium.cfd", 1)
 	}
 
 	return fmt.Sprintf("\u25BA %s\nPublished: %s\nLink: %s", item.Title, item.Published, item.GUID)
